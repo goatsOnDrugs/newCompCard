@@ -1,0 +1,18 @@
+# Route is the root field and each field like id and title are nested fields (maybe)
+type Route {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  title: String!
+  points: Int!
+  attempts: Int!
+  climbedBy: User
+}
+
+type User {
+  id: ID! @id
+  firstName: String!
+  lastName: String!
+  email: String! @unique
+  password: String!
+  routes: [Route!]!
+}

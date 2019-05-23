@@ -1,0 +1,34 @@
+# The schema defines the STRUCTURE of the server
+type Query {
+  info: String!
+  routeList: [Route!]!
+  route(id: ID!): Route!
+}
+type Route {
+  id: ID!
+  title: String!
+  points: Int!
+  attempts: Int!
+  climbedBy: User
+}
+type Mutation {
+  post(attempts: Int!, title: String!, points: Int!): Route
+  signup(
+    email: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+  ): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+}
+type AuthPayload {
+  token: String
+  user: User
+}
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  routes: [Route!]!
+}
