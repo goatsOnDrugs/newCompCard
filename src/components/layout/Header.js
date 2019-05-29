@@ -7,7 +7,6 @@ export default class Header extends Component {
   state = {
     sideDrawerOpen: false
   };
-
   drawerToggleClickHandler = () => {
     this.setState(prevState => {
       return { sideDrawerOpen: !prevState.sideDrawerOpen };

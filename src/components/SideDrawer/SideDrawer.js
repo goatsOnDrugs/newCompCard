@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 
+import { AUTH_TOKEN } from '../../constants';
 import './SideDrawer.css';
 
 const SideDrawer = props => {
@@ -8,6 +9,7 @@ const SideDrawer = props => {
   if (props.show) {
     drawerClasses = ['side-drawer', 'open'];
   }
+  const authToken = localStorage.getItem(AUTH_TOKEN);
 
   return (
     <nav className={drawerClasses.join(' ')}>
@@ -16,7 +18,25 @@ const SideDrawer = props => {
           <Link to='/'>Link</Link>
         </li>
         <li>
-          <Link to='/'>Link</Link>
+          <Link to='/login'>
+            <div className='flex flex-fixed'>
+              {authToken ? (
+                <div
+                  className='ml1 pointer black'
+                  onClick={() => {
+                    localStorage.removeItem(AUTH_TOKEN);
+                    navigate('/login');
+                  }}
+                >
+                  logout
+                </div>
+              ) : (
+                <Link to='/login' className='ml1 no-underline black'>
+                  login
+                </Link>
+              )}
+            </div>
+          </Link>
         </li>
       </ul>
     </nav>
