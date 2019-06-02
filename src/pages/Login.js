@@ -95,8 +95,8 @@ export default class Login extends Component {
   _confirm = async data => {
     const { token } = this.state.login ? data.login : data.signup;
     this._saveUserData(token);
-    console.log(this.state.email);
-    navigate('/routes', { state: { email: this.state.email } });
+    localStorage.setItem('email', this.state.email);
+    navigate('/routes');
   };
 
   // local storage is not ideal. change to another method.

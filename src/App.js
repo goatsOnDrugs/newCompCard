@@ -16,7 +16,7 @@ function App() {
           <Home path='/' />
           <Login path='login' />
           <RouteList path='routes' />
-          <Route path='route/:routeId' />
+          <Route path='route' />
         </Router>
       </div>
     </Layout>

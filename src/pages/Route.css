@@ -1,0 +1,18 @@
+.route-container {
+  width: 100%;
+  height: 100%;
+  padding-top: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-code {
+  width: 125px;
+  height: 125px;
+  background-color: #000;
+}
+
+.attempts-container {
+  display: flex;
+}

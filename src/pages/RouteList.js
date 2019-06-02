@@ -18,12 +18,10 @@ const ROUTES_QUERY = gql`
 `;
 
 const RouteList = props => {
+  const email = localStorage.getItem('email');
   return (
     <div>
-      <Query
-        query={ROUTES_QUERY}
-        variables={{ email: props.location.state.email }}
-      >
+      <Query query={ROUTES_QUERY} variables={{ email: email }}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
