@@ -95,8 +95,8 @@ export default class Login extends Component {
   _confirm = async data => {
     const { token } = this.state.login ? data.login : data.signup;
     this._saveUserData(token);
-    // this is probably using react router and not reach so most likely will throw error
-    navigate('/routes');
+    console.log(this.state.email);
+    navigate('/routes', { state: { email: this.state.email } });
   };
 
   // local storage is not ideal. change to another method.

@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { setContext } from 'apollo-link-context';
-
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
@@ -24,10 +23,11 @@ const authLink = setContext((_, { headers }) => {
     }
   };
 });
-// instantiate the
+// instantiate the client
+const cache = new InMemoryCache();
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  cache
 });
 
 ReactDOM.render(
