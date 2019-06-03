@@ -1,5 +1,5 @@
 import React from 'react';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import './Route.css';
 
@@ -14,25 +14,54 @@ const ROUTE_QUERY = gql`
   }
 `;
 
+const UPDATE_ATTEMPT_MUTATION = gql`
+  mutation UpdateAttempt($id: ID!, $attempts: Int!) {
+    updateRouteAttempts(id: $id, attempts: $attempts) {
+      id
+      title
+      attempts
+      points
+    }
+  }
+`;
+
 const Route = props => {
   return (
     <div className='route-container'>
-      {console.log(props.location.state.id)}
       <Query query={ROUTE_QUERY} variables={{ id: props.location.state.id }}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
           return (
             <div>
-              {console.log(data)}
               <h2>{data.route.title}</h2>
               <h3>Points: {data.route.points}</h3>
               <div className='qr-code' />
               <div className='attempts-container'>
                 <h3>Attempts</h3>
-                <div>-</div>
+                {data.route.attempts > 0 ? (
+                  <Mutation
+                    mutation={UPDATE_ATTEMPT_MUTATION}
+                    variables={{
+                      id: data.route.id,
+                      attempts: data.route.attempts - 1
+                    }}
+                  >
+                    {mutation => <div onClick={mutation}>-</div>}
+                  </Mutation>
+                ) : (
+                  <div>-</div>
+                )}
                 <div>{data.route.attempts}</div>
-                <div>+</div>
+                <Mutation
+                  mutation={UPDATE_ATTEMPT_MUTATION}
+                  variables={{
+                    id: data.route.id,
+                    attempts: data.route.attempts + 1
+                  }}
+                >
+                  {mutation => <div onClick={mutation}>+</div>}
+                </Mutation>
               </div>
             </div>
           );

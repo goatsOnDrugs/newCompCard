@@ -20,6 +20,7 @@ type Mutation {
     lastName: String!
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  updateRouteAttempts(id: ID!, attempts: Int!): Route
 }
 type AuthPayload {
   token: String

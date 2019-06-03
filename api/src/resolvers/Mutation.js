@@ -100,8 +100,16 @@ function post(parent, args, context, info) {
   });
 }
 
+function updateRouteAttempts(parent, args, context, info) {
+  return context.prisma.updateRoute({
+    data: { attempts: args.attempts },
+    where: { id: args.id }
+  });
+}
+
 module.exports = {
   signup,
   login,
-  post
+  post,
+  updateRouteAttempts
 };
