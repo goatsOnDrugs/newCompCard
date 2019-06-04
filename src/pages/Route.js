@@ -1,6 +1,7 @@
 import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import QRCode from 'qrcode.react';
 import './Route.css';
 
 const ROUTE_QUERY = gql`
@@ -10,6 +11,10 @@ const ROUTE_QUERY = gql`
       attempts
       points
       id
+      climbedBy {
+        firstName
+        lastName
+      }
     }
   }
 `;
@@ -36,9 +41,15 @@ const Route = props => {
             <div>
               <h2>{data.route.title}</h2>
               <h3>Points: {data.route.points}</h3>
-              <div className='qr-code' />
+              <QRCode
+                value={
+                  // id: data.route.id,
+                  // attempts: data.route.attempts.toString(),
+                  data.route.climbedBy.firstName
+                }
+              />
               <div className='attempts-container'>
-                <h3>Attempts</h3>
+                <h3>Attempts:</h3>
                 {data.route.attempts > 0 ? (
                   <Mutation
                     mutation={UPDATE_ATTEMPT_MUTATION}
@@ -63,6 +74,12 @@ const Route = props => {
                   {mutation => <div onClick={mutation}>+</div>}
                 </Mutation>
               </div>
+              <div>
+                <h3>Signatures:</h3>
+                <div />
+                <div />
+              </div>
+              <div className='submit-button'>Submit</div>
             </div>
           );
         }}

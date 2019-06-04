@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '../components/Button/Button';
 
 const Home = props => {
   return (
@@ -12,7 +11,7 @@ const Home = props => {
         alignItems: 'center'
       }}
     >
-      <Button />
+      Home Page
     </div>
   );
 };

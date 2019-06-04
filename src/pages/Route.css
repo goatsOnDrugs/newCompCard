@@ -15,4 +15,12 @@
 
 .attempts-container {
   display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.submit-button {
+  background-color: green;
+  width: 100px;
+  height: 40px;
 }
