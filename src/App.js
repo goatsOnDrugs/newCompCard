@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import RouteList from './pages/RouteList';
 import Route from './pages/Route';
 import Home from './pages/Home';
+import Signature from './pages/Signature';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Login path='login' />
           <RouteList path='routes' />
           <Route path='route' />
+          <Signature path='signature' />
         </Router>
       </div>
     </Layout>

@@ -41,13 +41,7 @@ const Route = props => {
             <div>
               <h2>{data.route.title}</h2>
               <h3>Points: {data.route.points}</h3>
-              <QRCode
-                value={
-                  // id: data.route.id,
-                  // attempts: data.route.attempts.toString(),
-                  data.route.climbedBy.firstName
-                }
-              />
+              <QRCode value={data.route.id} />
               <div className='attempts-container'>
                 <h3>Attempts:</h3>
                 {data.route.attempts > 0 ? (

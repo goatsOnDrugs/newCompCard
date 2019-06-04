@@ -18,13 +18,10 @@ const Toolbar = props => {
         <div className='toolbar_navigation-items'>
           <ul>
             <li>
-              <Link to='/'>Top Five</Link>
+              <Link to='/signature'>Signature</Link>
             </li>
             <li>
-              <Link to='/'>About</Link>
-            </li>
-            <li>
-              <Link to='/'>Something else</Link>
+              <Link to='/'>Map</Link>
             </li>
           </ul>
         </div>
