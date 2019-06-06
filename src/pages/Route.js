@@ -69,7 +69,10 @@ const Route = props => {
                 </Mutation>
               </div>
               <div>
-                <h3>Signatures:</h3>
+                <h3>
+                  Signatures:{' '}
+                  {data.route.signatures ? data.route.signatures.length : 0}
+                </h3>
                 <div />
                 <div />
               </div>

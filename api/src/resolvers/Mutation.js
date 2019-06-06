@@ -107,9 +107,18 @@ function updateRouteAttempts(parent, args, context, info) {
   });
 }
 
+function signRoute(parent, args, context, info) {
+  return context.prisma.createSignature({
+    author: args.author,
+    routeId: args.routeId,
+    route: { connect: { id: args.routeId } }
+  });
+}
+
 module.exports = {
   signup,
   login,
   post,
-  updateRouteAttempts
+  updateRouteAttempts,
+  signRoute
 };

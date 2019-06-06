@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateSignature {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -26,6 +30,12 @@ type Mutation {
   upsertRoute(where: RouteWhereUniqueInput!, create: RouteCreateInput!, update: RouteUpdateInput!): Route!
   deleteRoute(where: RouteWhereUniqueInput!): Route
   deleteManyRoutes(where: RouteWhereInput): BatchPayload!
+  createSignature(data: SignatureCreateInput!): Signature!
+  updateSignature(data: SignatureUpdateInput!, where: SignatureWhereUniqueInput!): Signature
+  updateManySignatures(data: SignatureUpdateManyMutationInput!, where: SignatureWhereInput): BatchPayload!
+  upsertSignature(where: SignatureWhereUniqueInput!, create: SignatureCreateInput!, update: SignatureUpdateInput!): Signature!
+  deleteSignature(where: SignatureWhereUniqueInput!): Signature
+  deleteManySignatures(where: SignatureWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -55,6 +65,9 @@ type Query {
   route(where: RouteWhereUniqueInput!): Route
   routes(where: RouteWhereInput, orderBy: RouteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Route]!
   routesConnection(where: RouteWhereInput, orderBy: RouteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RouteConnection!
+  signature(where: SignatureWhereUniqueInput!): Signature
+  signatures(where: SignatureWhereInput, orderBy: SignatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Signature]!
+  signaturesConnection(where: SignatureWhereInput, orderBy: SignatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SignatureConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -68,6 +81,7 @@ type Route {
   points: Int!
   attempts: Int!
   climbedBy: User
+  signatures(where: SignatureWhereInput, orderBy: SignatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Signature!]
 }
 
 type RouteConnection {
@@ -82,6 +96,7 @@ input RouteCreateInput {
   points: Int!
   attempts: Int!
   climbedBy: UserCreateOneWithoutRoutesInput
+  signatures: SignatureCreateManyWithoutRouteInput
 }
 
 input RouteCreateManyWithoutClimbedByInput {
@@ -89,11 +104,25 @@ input RouteCreateManyWithoutClimbedByInput {
   connect: [RouteWhereUniqueInput!]
 }
 
+input RouteCreateOneWithoutSignaturesInput {
+  create: RouteCreateWithoutSignaturesInput
+  connect: RouteWhereUniqueInput
+}
+
 input RouteCreateWithoutClimbedByInput {
   id: ID
   title: String!
   points: Int!
   attempts: Int!
+  signatures: SignatureCreateManyWithoutRouteInput
+}
+
+input RouteCreateWithoutSignaturesInput {
+  id: ID
+  title: String!
+  points: Int!
+  attempts: Int!
+  climbedBy: UserCreateOneWithoutRoutesInput
 }
 
 type RouteEdge {
@@ -203,6 +232,7 @@ input RouteUpdateInput {
   points: Int
   attempts: Int
   climbedBy: UserUpdateOneWithoutRoutesInput
+  signatures: SignatureUpdateManyWithoutRouteInput
 }
 
 input RouteUpdateManyDataInput {
@@ -234,15 +264,35 @@ input RouteUpdateManyWithWhereNestedInput {
   data: RouteUpdateManyDataInput!
 }
 
+input RouteUpdateOneRequiredWithoutSignaturesInput {
+  create: RouteCreateWithoutSignaturesInput
+  update: RouteUpdateWithoutSignaturesDataInput
+  upsert: RouteUpsertWithoutSignaturesInput
+  connect: RouteWhereUniqueInput
+}
+
 input RouteUpdateWithoutClimbedByDataInput {
   title: String
   points: Int
   attempts: Int
+  signatures: SignatureUpdateManyWithoutRouteInput
+}
+
+input RouteUpdateWithoutSignaturesDataInput {
+  title: String
+  points: Int
+  attempts: Int
+  climbedBy: UserUpdateOneWithoutRoutesInput
 }
 
 input RouteUpdateWithWhereUniqueWithoutClimbedByInput {
   where: RouteWhereUniqueInput!
   data: RouteUpdateWithoutClimbedByDataInput!
+}
+
+input RouteUpsertWithoutSignaturesInput {
+  update: RouteUpdateWithoutSignaturesDataInput!
+  create: RouteCreateWithoutSignaturesInput!
 }
 
 input RouteUpsertWithWhereUniqueWithoutClimbedByInput {
@@ -305,6 +355,9 @@ input RouteWhereInput {
   attempts_gt: Int
   attempts_gte: Int
   climbedBy: UserWhereInput
+  signatures_every: SignatureWhereInput
+  signatures_some: SignatureWhereInput
+  signatures_none: SignatureWhereInput
   AND: [RouteWhereInput!]
   OR: [RouteWhereInput!]
   NOT: [RouteWhereInput!]
@@ -314,8 +367,228 @@ input RouteWhereUniqueInput {
   id: ID
 }
 
+type Signature {
+  id: ID!
+  routeId: ID!
+  author: String!
+  route: Route!
+}
+
+type SignatureConnection {
+  pageInfo: PageInfo!
+  edges: [SignatureEdge]!
+  aggregate: AggregateSignature!
+}
+
+input SignatureCreateInput {
+  id: ID
+  routeId: ID!
+  author: String!
+  route: RouteCreateOneWithoutSignaturesInput!
+}
+
+input SignatureCreateManyWithoutRouteInput {
+  create: [SignatureCreateWithoutRouteInput!]
+  connect: [SignatureWhereUniqueInput!]
+}
+
+input SignatureCreateWithoutRouteInput {
+  id: ID
+  routeId: ID!
+  author: String!
+}
+
+type SignatureEdge {
+  node: Signature!
+  cursor: String!
+}
+
+enum SignatureOrderByInput {
+  id_ASC
+  id_DESC
+  routeId_ASC
+  routeId_DESC
+  author_ASC
+  author_DESC
+}
+
+type SignaturePreviousValues {
+  id: ID!
+  routeId: ID!
+  author: String!
+}
+
+input SignatureScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  routeId: ID
+  routeId_not: ID
+  routeId_in: [ID!]
+  routeId_not_in: [ID!]
+  routeId_lt: ID
+  routeId_lte: ID
+  routeId_gt: ID
+  routeId_gte: ID
+  routeId_contains: ID
+  routeId_not_contains: ID
+  routeId_starts_with: ID
+  routeId_not_starts_with: ID
+  routeId_ends_with: ID
+  routeId_not_ends_with: ID
+  author: String
+  author_not: String
+  author_in: [String!]
+  author_not_in: [String!]
+  author_lt: String
+  author_lte: String
+  author_gt: String
+  author_gte: String
+  author_contains: String
+  author_not_contains: String
+  author_starts_with: String
+  author_not_starts_with: String
+  author_ends_with: String
+  author_not_ends_with: String
+  AND: [SignatureScalarWhereInput!]
+  OR: [SignatureScalarWhereInput!]
+  NOT: [SignatureScalarWhereInput!]
+}
+
+type SignatureSubscriptionPayload {
+  mutation: MutationType!
+  node: Signature
+  updatedFields: [String!]
+  previousValues: SignaturePreviousValues
+}
+
+input SignatureSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SignatureWhereInput
+  AND: [SignatureSubscriptionWhereInput!]
+  OR: [SignatureSubscriptionWhereInput!]
+  NOT: [SignatureSubscriptionWhereInput!]
+}
+
+input SignatureUpdateInput {
+  routeId: ID
+  author: String
+  route: RouteUpdateOneRequiredWithoutSignaturesInput
+}
+
+input SignatureUpdateManyDataInput {
+  routeId: ID
+  author: String
+}
+
+input SignatureUpdateManyMutationInput {
+  routeId: ID
+  author: String
+}
+
+input SignatureUpdateManyWithoutRouteInput {
+  create: [SignatureCreateWithoutRouteInput!]
+  delete: [SignatureWhereUniqueInput!]
+  connect: [SignatureWhereUniqueInput!]
+  set: [SignatureWhereUniqueInput!]
+  disconnect: [SignatureWhereUniqueInput!]
+  update: [SignatureUpdateWithWhereUniqueWithoutRouteInput!]
+  upsert: [SignatureUpsertWithWhereUniqueWithoutRouteInput!]
+  deleteMany: [SignatureScalarWhereInput!]
+  updateMany: [SignatureUpdateManyWithWhereNestedInput!]
+}
+
+input SignatureUpdateManyWithWhereNestedInput {
+  where: SignatureScalarWhereInput!
+  data: SignatureUpdateManyDataInput!
+}
+
+input SignatureUpdateWithoutRouteDataInput {
+  routeId: ID
+  author: String
+}
+
+input SignatureUpdateWithWhereUniqueWithoutRouteInput {
+  where: SignatureWhereUniqueInput!
+  data: SignatureUpdateWithoutRouteDataInput!
+}
+
+input SignatureUpsertWithWhereUniqueWithoutRouteInput {
+  where: SignatureWhereUniqueInput!
+  update: SignatureUpdateWithoutRouteDataInput!
+  create: SignatureCreateWithoutRouteInput!
+}
+
+input SignatureWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  routeId: ID
+  routeId_not: ID
+  routeId_in: [ID!]
+  routeId_not_in: [ID!]
+  routeId_lt: ID
+  routeId_lte: ID
+  routeId_gt: ID
+  routeId_gte: ID
+  routeId_contains: ID
+  routeId_not_contains: ID
+  routeId_starts_with: ID
+  routeId_not_starts_with: ID
+  routeId_ends_with: ID
+  routeId_not_ends_with: ID
+  author: String
+  author_not: String
+  author_in: [String!]
+  author_not_in: [String!]
+  author_lt: String
+  author_lte: String
+  author_gt: String
+  author_gte: String
+  author_contains: String
+  author_not_contains: String
+  author_starts_with: String
+  author_not_starts_with: String
+  author_ends_with: String
+  author_not_ends_with: String
+  route: RouteWhereInput
+  AND: [SignatureWhereInput!]
+  OR: [SignatureWhereInput!]
+  NOT: [SignatureWhereInput!]
+}
+
+input SignatureWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   route(where: RouteSubscriptionWhereInput): RouteSubscriptionPayload
+  signature(where: SignatureSubscriptionWhereInput): SignatureSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

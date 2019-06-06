@@ -17,6 +17,7 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   route: (where?: RouteWhereInput) => Promise<boolean>;
+  signature: (where?: SignatureWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -58,6 +59,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => RouteConnectionPromise;
+  signature: (where: SignatureWhereUniqueInput) => SignatureNullablePromise;
+  signatures: (args?: {
+    where?: SignatureWhereInput;
+    orderBy?: SignatureOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Signature>;
+  signaturesConnection: (args?: {
+    where?: SignatureWhereInput;
+    orderBy?: SignatureOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => SignatureConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -99,6 +119,22 @@ export interface Prisma {
   }) => RoutePromise;
   deleteRoute: (where: RouteWhereUniqueInput) => RoutePromise;
   deleteManyRoutes: (where?: RouteWhereInput) => BatchPayloadPromise;
+  createSignature: (data: SignatureCreateInput) => SignaturePromise;
+  updateSignature: (args: {
+    data: SignatureUpdateInput;
+    where: SignatureWhereUniqueInput;
+  }) => SignaturePromise;
+  updateManySignatures: (args: {
+    data: SignatureUpdateManyMutationInput;
+    where?: SignatureWhereInput;
+  }) => BatchPayloadPromise;
+  upsertSignature: (args: {
+    where: SignatureWhereUniqueInput;
+    create: SignatureCreateInput;
+    update: SignatureUpdateInput;
+  }) => SignaturePromise;
+  deleteSignature: (where: SignatureWhereUniqueInput) => SignaturePromise;
+  deleteManySignatures: (where?: SignatureWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -127,6 +163,9 @@ export interface Subscription {
   route: (
     where?: RouteSubscriptionWhereInput
   ) => RouteSubscriptionPayloadSubscription;
+  signature: (
+    where?: SignatureSubscriptionWhereInput
+  ) => SignatureSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -151,6 +190,14 @@ export type RouteOrderByInput =
   | "points_DESC"
   | "attempts_ASC"
   | "attempts_DESC";
+
+export type SignatureOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "routeId_ASC"
+  | "routeId_DESC"
+  | "author_ASC"
+  | "author_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -224,6 +271,9 @@ export interface RouteWhereInput {
   attempts_gt?: Maybe<Int>;
   attempts_gte?: Maybe<Int>;
   climbedBy?: Maybe<UserWhereInput>;
+  signatures_every?: Maybe<SignatureWhereInput>;
+  signatures_some?: Maybe<SignatureWhereInput>;
+  signatures_none?: Maybe<SignatureWhereInput>;
   AND?: Maybe<RouteWhereInput[] | RouteWhereInput>;
   OR?: Maybe<RouteWhereInput[] | RouteWhereInput>;
   NOT?: Maybe<RouteWhereInput[] | RouteWhereInput>;
@@ -308,6 +358,59 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export interface SignatureWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  routeId?: Maybe<ID_Input>;
+  routeId_not?: Maybe<ID_Input>;
+  routeId_in?: Maybe<ID_Input[] | ID_Input>;
+  routeId_not_in?: Maybe<ID_Input[] | ID_Input>;
+  routeId_lt?: Maybe<ID_Input>;
+  routeId_lte?: Maybe<ID_Input>;
+  routeId_gt?: Maybe<ID_Input>;
+  routeId_gte?: Maybe<ID_Input>;
+  routeId_contains?: Maybe<ID_Input>;
+  routeId_not_contains?: Maybe<ID_Input>;
+  routeId_starts_with?: Maybe<ID_Input>;
+  routeId_not_starts_with?: Maybe<ID_Input>;
+  routeId_ends_with?: Maybe<ID_Input>;
+  routeId_not_ends_with?: Maybe<ID_Input>;
+  author?: Maybe<String>;
+  author_not?: Maybe<String>;
+  author_in?: Maybe<String[] | String>;
+  author_not_in?: Maybe<String[] | String>;
+  author_lt?: Maybe<String>;
+  author_lte?: Maybe<String>;
+  author_gt?: Maybe<String>;
+  author_gte?: Maybe<String>;
+  author_contains?: Maybe<String>;
+  author_not_contains?: Maybe<String>;
+  author_starts_with?: Maybe<String>;
+  author_not_starts_with?: Maybe<String>;
+  author_ends_with?: Maybe<String>;
+  author_not_ends_with?: Maybe<String>;
+  route?: Maybe<RouteWhereInput>;
+  AND?: Maybe<SignatureWhereInput[] | SignatureWhereInput>;
+  OR?: Maybe<SignatureWhereInput[] | SignatureWhereInput>;
+  NOT?: Maybe<SignatureWhereInput[] | SignatureWhereInput>;
+}
+
+export type SignatureWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
@@ -319,6 +422,7 @@ export interface RouteCreateInput {
   points: Int;
   attempts: Int;
   climbedBy?: Maybe<UserCreateOneWithoutRoutesInput>;
+  signatures?: Maybe<SignatureCreateManyWithoutRouteInput>;
 }
 
 export interface UserCreateOneWithoutRoutesInput {
@@ -334,11 +438,25 @@ export interface UserCreateWithoutRoutesInput {
   password: String;
 }
 
+export interface SignatureCreateManyWithoutRouteInput {
+  create?: Maybe<
+    SignatureCreateWithoutRouteInput[] | SignatureCreateWithoutRouteInput
+  >;
+  connect?: Maybe<SignatureWhereUniqueInput[] | SignatureWhereUniqueInput>;
+}
+
+export interface SignatureCreateWithoutRouteInput {
+  id?: Maybe<ID_Input>;
+  routeId: ID_Input;
+  author: String;
+}
+
 export interface RouteUpdateInput {
   title?: Maybe<String>;
   points?: Maybe<Int>;
   attempts?: Maybe<Int>;
   climbedBy?: Maybe<UserUpdateOneWithoutRoutesInput>;
+  signatures?: Maybe<SignatureUpdateManyWithoutRouteInput>;
 }
 
 export interface UserUpdateOneWithoutRoutesInput {
@@ -362,10 +480,157 @@ export interface UserUpsertWithoutRoutesInput {
   create: UserCreateWithoutRoutesInput;
 }
 
+export interface SignatureUpdateManyWithoutRouteInput {
+  create?: Maybe<
+    SignatureCreateWithoutRouteInput[] | SignatureCreateWithoutRouteInput
+  >;
+  delete?: Maybe<SignatureWhereUniqueInput[] | SignatureWhereUniqueInput>;
+  connect?: Maybe<SignatureWhereUniqueInput[] | SignatureWhereUniqueInput>;
+  set?: Maybe<SignatureWhereUniqueInput[] | SignatureWhereUniqueInput>;
+  disconnect?: Maybe<SignatureWhereUniqueInput[] | SignatureWhereUniqueInput>;
+  update?: Maybe<
+    | SignatureUpdateWithWhereUniqueWithoutRouteInput[]
+    | SignatureUpdateWithWhereUniqueWithoutRouteInput
+  >;
+  upsert?: Maybe<
+    | SignatureUpsertWithWhereUniqueWithoutRouteInput[]
+    | SignatureUpsertWithWhereUniqueWithoutRouteInput
+  >;
+  deleteMany?: Maybe<SignatureScalarWhereInput[] | SignatureScalarWhereInput>;
+  updateMany?: Maybe<
+    | SignatureUpdateManyWithWhereNestedInput[]
+    | SignatureUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface SignatureUpdateWithWhereUniqueWithoutRouteInput {
+  where: SignatureWhereUniqueInput;
+  data: SignatureUpdateWithoutRouteDataInput;
+}
+
+export interface SignatureUpdateWithoutRouteDataInput {
+  routeId?: Maybe<ID_Input>;
+  author?: Maybe<String>;
+}
+
+export interface SignatureUpsertWithWhereUniqueWithoutRouteInput {
+  where: SignatureWhereUniqueInput;
+  update: SignatureUpdateWithoutRouteDataInput;
+  create: SignatureCreateWithoutRouteInput;
+}
+
+export interface SignatureScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  routeId?: Maybe<ID_Input>;
+  routeId_not?: Maybe<ID_Input>;
+  routeId_in?: Maybe<ID_Input[] | ID_Input>;
+  routeId_not_in?: Maybe<ID_Input[] | ID_Input>;
+  routeId_lt?: Maybe<ID_Input>;
+  routeId_lte?: Maybe<ID_Input>;
+  routeId_gt?: Maybe<ID_Input>;
+  routeId_gte?: Maybe<ID_Input>;
+  routeId_contains?: Maybe<ID_Input>;
+  routeId_not_contains?: Maybe<ID_Input>;
+  routeId_starts_with?: Maybe<ID_Input>;
+  routeId_not_starts_with?: Maybe<ID_Input>;
+  routeId_ends_with?: Maybe<ID_Input>;
+  routeId_not_ends_with?: Maybe<ID_Input>;
+  author?: Maybe<String>;
+  author_not?: Maybe<String>;
+  author_in?: Maybe<String[] | String>;
+  author_not_in?: Maybe<String[] | String>;
+  author_lt?: Maybe<String>;
+  author_lte?: Maybe<String>;
+  author_gt?: Maybe<String>;
+  author_gte?: Maybe<String>;
+  author_contains?: Maybe<String>;
+  author_not_contains?: Maybe<String>;
+  author_starts_with?: Maybe<String>;
+  author_not_starts_with?: Maybe<String>;
+  author_ends_with?: Maybe<String>;
+  author_not_ends_with?: Maybe<String>;
+  AND?: Maybe<SignatureScalarWhereInput[] | SignatureScalarWhereInput>;
+  OR?: Maybe<SignatureScalarWhereInput[] | SignatureScalarWhereInput>;
+  NOT?: Maybe<SignatureScalarWhereInput[] | SignatureScalarWhereInput>;
+}
+
+export interface SignatureUpdateManyWithWhereNestedInput {
+  where: SignatureScalarWhereInput;
+  data: SignatureUpdateManyDataInput;
+}
+
+export interface SignatureUpdateManyDataInput {
+  routeId?: Maybe<ID_Input>;
+  author?: Maybe<String>;
+}
+
 export interface RouteUpdateManyMutationInput {
   title?: Maybe<String>;
   points?: Maybe<Int>;
   attempts?: Maybe<Int>;
+}
+
+export interface SignatureCreateInput {
+  id?: Maybe<ID_Input>;
+  routeId: ID_Input;
+  author: String;
+  route: RouteCreateOneWithoutSignaturesInput;
+}
+
+export interface RouteCreateOneWithoutSignaturesInput {
+  create?: Maybe<RouteCreateWithoutSignaturesInput>;
+  connect?: Maybe<RouteWhereUniqueInput>;
+}
+
+export interface RouteCreateWithoutSignaturesInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  points: Int;
+  attempts: Int;
+  climbedBy?: Maybe<UserCreateOneWithoutRoutesInput>;
+}
+
+export interface SignatureUpdateInput {
+  routeId?: Maybe<ID_Input>;
+  author?: Maybe<String>;
+  route?: Maybe<RouteUpdateOneRequiredWithoutSignaturesInput>;
+}
+
+export interface RouteUpdateOneRequiredWithoutSignaturesInput {
+  create?: Maybe<RouteCreateWithoutSignaturesInput>;
+  update?: Maybe<RouteUpdateWithoutSignaturesDataInput>;
+  upsert?: Maybe<RouteUpsertWithoutSignaturesInput>;
+  connect?: Maybe<RouteWhereUniqueInput>;
+}
+
+export interface RouteUpdateWithoutSignaturesDataInput {
+  title?: Maybe<String>;
+  points?: Maybe<Int>;
+  attempts?: Maybe<Int>;
+  climbedBy?: Maybe<UserUpdateOneWithoutRoutesInput>;
+}
+
+export interface RouteUpsertWithoutSignaturesInput {
+  update: RouteUpdateWithoutSignaturesDataInput;
+  create: RouteCreateWithoutSignaturesInput;
+}
+
+export interface SignatureUpdateManyMutationInput {
+  routeId?: Maybe<ID_Input>;
+  author?: Maybe<String>;
 }
 
 export interface UserCreateInput {
@@ -389,6 +654,7 @@ export interface RouteCreateWithoutClimbedByInput {
   title: String;
   points: Int;
   attempts: Int;
+  signatures?: Maybe<SignatureCreateManyWithoutRouteInput>;
 }
 
 export interface UserUpdateInput {
@@ -430,6 +696,7 @@ export interface RouteUpdateWithoutClimbedByDataInput {
   title?: Maybe<String>;
   points?: Maybe<Int>;
   attempts?: Maybe<Int>;
+  signatures?: Maybe<SignatureUpdateManyWithoutRouteInput>;
 }
 
 export interface RouteUpsertWithWhereUniqueWithoutClimbedByInput {
@@ -525,6 +792,23 @@ export interface RouteSubscriptionWhereInput {
   NOT?: Maybe<RouteSubscriptionWhereInput[] | RouteSubscriptionWhereInput>;
 }
 
+export interface SignatureSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<SignatureWhereInput>;
+  AND?: Maybe<
+    SignatureSubscriptionWhereInput[] | SignatureSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    SignatureSubscriptionWhereInput[] | SignatureSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    SignatureSubscriptionWhereInput[] | SignatureSubscriptionWhereInput
+  >;
+}
+
 export interface UserSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -555,6 +839,15 @@ export interface RoutePromise extends Promise<Route>, Fragmentable {
   points: () => Promise<Int>;
   attempts: () => Promise<Int>;
   climbedBy: <T = UserPromise>() => T;
+  signatures: <T = FragmentableArray<Signature>>(args?: {
+    where?: SignatureWhereInput;
+    orderBy?: SignatureOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface RouteSubscription
@@ -566,6 +859,15 @@ export interface RouteSubscription
   points: () => Promise<AsyncIterator<Int>>;
   attempts: () => Promise<AsyncIterator<Int>>;
   climbedBy: <T = UserSubscription>() => T;
+  signatures: <T = Promise<AsyncIterator<SignatureSubscription>>>(args?: {
+    where?: SignatureWhereInput;
+    orderBy?: SignatureOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface RouteNullablePromise
@@ -577,6 +879,15 @@ export interface RouteNullablePromise
   points: () => Promise<Int>;
   attempts: () => Promise<Int>;
   climbedBy: <T = UserPromise>() => T;
+  signatures: <T = FragmentableArray<Signature>>(args?: {
+    where?: SignatureWhereInput;
+    orderBy?: SignatureOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface User {
@@ -640,6 +951,37 @@ export interface UserNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+}
+
+export interface Signature {
+  id: ID_Output;
+  routeId: ID_Output;
+  author: String;
+}
+
+export interface SignaturePromise extends Promise<Signature>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  routeId: () => Promise<ID_Output>;
+  author: () => Promise<String>;
+  route: <T = RoutePromise>() => T;
+}
+
+export interface SignatureSubscription
+  extends Promise<AsyncIterator<Signature>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  routeId: () => Promise<AsyncIterator<ID_Output>>;
+  author: () => Promise<AsyncIterator<String>>;
+  route: <T = RouteSubscription>() => T;
+}
+
+export interface SignatureNullablePromise
+  extends Promise<Signature | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  routeId: () => Promise<ID_Output>;
+  author: () => Promise<String>;
+  route: <T = RoutePromise>() => T;
 }
 
 export interface RouteConnection {
@@ -715,6 +1057,62 @@ export interface AggregateRoutePromise
 
 export interface AggregateRouteSubscription
   extends Promise<AsyncIterator<AggregateRoute>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SignatureConnection {
+  pageInfo: PageInfo;
+  edges: SignatureEdge[];
+}
+
+export interface SignatureConnectionPromise
+  extends Promise<SignatureConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SignatureEdge>>() => T;
+  aggregate: <T = AggregateSignaturePromise>() => T;
+}
+
+export interface SignatureConnectionSubscription
+  extends Promise<AsyncIterator<SignatureConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SignatureEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSignatureSubscription>() => T;
+}
+
+export interface SignatureEdge {
+  node: Signature;
+  cursor: String;
+}
+
+export interface SignatureEdgePromise
+  extends Promise<SignatureEdge>,
+    Fragmentable {
+  node: <T = SignaturePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SignatureEdgeSubscription
+  extends Promise<AsyncIterator<SignatureEdge>>,
+    Fragmentable {
+  node: <T = SignatureSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateSignature {
+  count: Int;
+}
+
+export interface AggregateSignaturePromise
+  extends Promise<AggregateSignature>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSignatureSubscription
+  extends Promise<AsyncIterator<AggregateSignature>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -842,6 +1240,53 @@ export interface RoutePreviousValuesSubscription
   attempts: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface SignatureSubscriptionPayload {
+  mutation: MutationType;
+  node: Signature;
+  updatedFields: String[];
+  previousValues: SignaturePreviousValues;
+}
+
+export interface SignatureSubscriptionPayloadPromise
+  extends Promise<SignatureSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SignaturePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SignaturePreviousValuesPromise>() => T;
+}
+
+export interface SignatureSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SignatureSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SignatureSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SignaturePreviousValuesSubscription>() => T;
+}
+
+export interface SignaturePreviousValues {
+  id: ID_Output;
+  routeId: ID_Output;
+  author: String;
+}
+
+export interface SignaturePreviousValuesPromise
+  extends Promise<SignaturePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  routeId: () => Promise<ID_Output>;
+  author: () => Promise<String>;
+}
+
+export interface SignaturePreviousValuesSubscription
+  extends Promise<AsyncIterator<SignaturePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  routeId: () => Promise<AsyncIterator<ID_Output>>;
+  author: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -939,6 +1384,10 @@ export const models: Model[] = [
   },
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Signature",
     embedded: false
   }
 ];

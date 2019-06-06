@@ -6,6 +6,7 @@ type Route {
   points: Int!
   attempts: Int!
   climbedBy: User
+  signatures: [Signature]
 }
 
 type User {
@@ -15,4 +16,11 @@ type User {
   email: String! @unique
   password: String!
   routes: [Route!]!
+}
+
+type Signature {
+  id: ID! @id
+  routeId: ID!
+  author: String!
+  route: Route!
 }
