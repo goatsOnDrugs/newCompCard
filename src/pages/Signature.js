@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import QrReader from 'react-qr-reader';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import React, { Component } from "react";
+import QrReader from "react-qr-reader";
+import gql from "graphql-tag";
+import { Query, Mutation } from "react-apollo";
 
 const USER_QUERY = gql`
   query UserQuery($email: String!) {
@@ -15,17 +15,16 @@ const USER_QUERY = gql`
 
 const SIGN_MUTATION = gql`
   mutation SignRoute($routeId: ID!, $author: String!) {
-    signRoute(author: $author, routeId: $routeId) {
-      signatures {
-        author
-      }
+    signRoute(routeId: $routeId, author: $author) {
+      routeId
+      author
     }
   }
 `;
 
 export default class Signature extends Component {
   state = {
-    routeId: ''
+    routeId: ""
   };
   handleScan = data => {
     if (data) {
@@ -38,26 +37,22 @@ export default class Signature extends Component {
     console.error(err);
   };
   render() {
-    const email = localStorage.getItem('email');
+    const email = localStorage.getItem("email");
     return (
       <div className='signature-page-container'>
         <QrReader
           delay={300}
           onError={this.handleError}
           onScan={this.handleScan}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         />
         <p>{this.state.routeId}</p>
         <Query query={USER_QUERY} variables={{ email: email }}>
           {({ loading, error, data }) => {
-            if (loading) return 'Loading...';
+            if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
             return (
               <div>
-                {console.log({
-                  id: this.state.routeId,
-                  name: `${data.user.firstName} ${data.user.lastName}`
-                })}
                 <Mutation
                   mutation={SIGN_MUTATION}
                   variables={{

@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import styled from "styled-components";
 
-import Toolbar from '../Toolbar/Toolbar';
-import SideDrawer from '../SideDrawer/SideDrawer';
-import Backdrop from '../Backdrop/Backdrop';
+import Toolbar from "../Toolbar/Toolbar";
+import SideDrawer from "../SideDrawer/SideDrawer";
+import Backdrop from "../Backdrop/Backdrop";
+
 export default class Header extends Component {
   state = {
     sideDrawerOpen: false
@@ -16,19 +18,22 @@ export default class Header extends Component {
   backdropClickHandler = () => {
     this.setState({ sideDrawerOpen: false });
   };
-  render(props) {
+  render() {
     let backdrop;
     if (this.state.sideDrawerOpen) {
       backdrop = <Backdrop click={this.backdropClickHandler} />;
     }
     return (
-      <div>
-        <div style={{ height: '100%' }}>
-          <Toolbar drawerClickHandler={this.drawerToggleClickHandler} />
-          <SideDrawer show={this.state.sideDrawerOpen} />
-          {backdrop}
-        </div>
-      </div>
+      <Container>
+        <Toolbar drawerClickHandler={this.drawerToggleClickHandler} />
+        <SideDrawer show={this.state.sideDrawerOpen} />
+        {backdrop}
+      </Container>
     );
   }
 }
+
+const Container = styled.div`
+  display: flex;
+  height: 28px;
+`;

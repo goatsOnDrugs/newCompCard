@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { APP_SECRET, getUserId } = require('../utils');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { APP_SECRET, getUserId } = require("../utils");
 
 async function signup(parent, args, context, info) {
   // encrypting the password
@@ -12,52 +12,52 @@ async function signup(parent, args, context, info) {
     routes: {
       create: [
         {
-          title: 'Advanced 1',
+          title: "Advanced 1",
           attempts: 0,
           points: 2100
         },
         {
-          title: 'Advanced 2',
+          title: "Advanced 2",
           attempts: 0,
           points: 2200
         },
         {
-          title: 'Advanced 3',
+          title: "Advanced 3",
           attempts: 0,
           points: 2300
         },
         {
-          title: 'Advanced 4',
+          title: "Advanced 4",
           attempts: 0,
           points: 2400
         },
         {
-          title: 'Advanced 5',
+          title: "Advanced 5",
           attempts: 0,
           points: 2500
         },
         {
-          title: 'Advanced 6',
+          title: "Advanced 6",
           attempts: 0,
           points: 2600
         },
         {
-          title: 'Advanced 7',
+          title: "Advanced 7",
           attempts: 0,
           points: 2700
         },
         {
-          title: 'Advanced 8',
+          title: "Advanced 8",
           attempts: 0,
           points: 2800
         },
         {
-          title: 'Advanced 9',
+          title: "Advanced 9",
           attempts: 0,
           points: 2900
         },
         {
-          title: 'Advanced 10',
+          title: "Advanced 10",
           attempts: 0,
           points: 3000
         }
@@ -76,12 +76,12 @@ async function login(parent, args, context, info) {
   // use prisma client to retrieve user based on email
   const user = await context.prisma.user({ email: args.email });
   if (!user) {
-    throw new Error('No such user found');
+    throw new Error("No such user found");
   }
   // comparing passwords
   const valid = await bcrypt.compare(args.password, user.password);
   if (!valid) {
-    throw new Error('Invalid password');
+    throw new Error("Invalid password");
   }
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
   return {
@@ -107,18 +107,11 @@ function updateRouteAttempts(parent, args, context, info) {
   });
 }
 
-function signRoute(parent, args, context, info) {
-  return context.prisma.createSignature({
-    author: args.author,
-    routeId: args.routeId,
-    route: { connect: { id: args.routeId } }
-  });
-}
+// route: { connect: { id: args.routeId } }
 
 module.exports = {
   signup,
   login,
   post,
-  updateRouteAttempts,
-  signRoute
+  updateRouteAttempts
 };

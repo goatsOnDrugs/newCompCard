@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import { navigate } from '@reach/router';
+import React, { Component } from "react";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
+import { navigate } from "@reach/router";
+import styled from "styled-components";
 
-import { AUTH_TOKEN } from '../constants';
+import { AUTH_TOKEN } from "../constants";
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation(
@@ -34,19 +35,19 @@ const LOGIN_MUTATION = gql`
 export default class Login extends Component {
   state = {
     login: true, // switches between login and signup
-    email: '',
-    password: '',
-    firstName: '',
-    lastName: ''
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: ""
   };
   render() {
     const { login, email, password, firstName, lastName } = this.state;
     return (
-      <div>
-        <h4>{login ? 'Login' : 'Sign Up'}</h4>
-        <div>
+      <Container>
+        <Title>{login ? "Login" : "Sign Up"}</Title>
+        <InputWrapper>
           {!login && (
-            <input
+            <Input
               value={firstName}
               onChange={e => this.setState({ firstName: e.target.value })}
               type='text'
@@ -54,26 +55,26 @@ export default class Login extends Component {
             />
           )}
           {!login && (
-            <input
+            <Input
               value={lastName}
               onChange={e => this.setState({ lastName: e.target.value })}
               type='text'
               placeholder='Last Name'
             />
           )}
-          <input
+          <Input
             value={email}
             onChange={e => this.setState({ email: e.target.value })}
             type='text'
             placeholder='example@email.com'
           />
-          <input
+          <Input
             value={password}
             onChange={e => this.setState({ password: e.target.value })}
             type='text'
             placeholder='Password'
           />
-        </div>
+        </InputWrapper>
         <div>
           <Mutation
             mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
@@ -81,22 +82,24 @@ export default class Login extends Component {
             onCompleted={data => this._confirm(data)}
           >
             {mutation => (
-              <div onClick={mutation}>{login ? 'login' : 'create account'}</div>
+              <SubmitBtn onClick={mutation}>
+                {login ? "login" : "create account"}
+              </SubmitBtn>
             )}
           </Mutation>
-          <div onClick={() => this.setState({ login: !login })}>
-            {login ? 'Need to create an account?' : 'already have an account?'}
-          </div>
+          <ToggleButton onClick={() => this.setState({ login: !login })}>
+            {login ? "Need to create an account?" : "already have an account?"}
+          </ToggleButton>
         </div>
-      </div>
+      </Container>
     );
   }
 
   _confirm = async data => {
     const { token } = this.state.login ? data.login : data.signup;
     this._saveUserData(token);
-    localStorage.setItem('email', this.state.email);
-    navigate('/routes');
+    localStorage.setItem("email", this.state.email);
+    navigate("/routes");
   };
 
   // local storage is not ideal. change to another method.
@@ -104,3 +107,33 @@ export default class Login extends Component {
     localStorage.setItem(AUTH_TOKEN, token);
   };
 }
+
+const Container = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+`;
+const Title = styled.h2``;
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 150px;
+  width: 100%;
+  border: 1px solid #000;
+  padding: 20px;
+`;
+const Input = styled.input``;
+const ToggleButton = styled.div``;
+const SubmitBtn = styled.div`
+  height: 30px;
+  width: 100%;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

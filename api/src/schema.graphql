@@ -10,7 +10,6 @@ type Route {
   points: Int!
   attempts: Int!
   climbedBy: User
-  signatures: [Signature]
 }
 type Mutation {
   post(attempts: Int!, title: String!, points: Int!): Route
@@ -22,7 +21,6 @@ type Mutation {
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
   updateRouteAttempts(id: ID!, attempts: Int!): Route
-  signRoute(routeId: ID!, author: ID!): Route
 }
 type AuthPayload {
   token: String
@@ -34,10 +32,4 @@ type User {
   lastName: String!
   email: String!
   routes: [Route!]!
-}
-type Signature {
-  id: ID!
-  routeId: ID!
-  author: String!
-  route: Route!
 }
