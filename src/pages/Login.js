@@ -109,8 +109,10 @@ export default class Login extends Component {
 }
 
 const Container = styled.div`
-  display: flex;
   height: 100%;
+  width: 100%;
+  padding-top: 56px;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -124,11 +126,20 @@ const InputWrapper = styled.div`
   align-items: center;
   height: 150px;
   width: 100%;
-  border: 1px solid #000;
+  border: 1px dotted #000;
   padding: 20px;
 `;
-const Input = styled.input``;
-const ToggleButton = styled.div``;
+const Input = styled.input`
+  width: 75%;
+  height: 30px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding-left: 5px;
+`;
+const ToggleButton = styled.div`
+  border: 1px solid #000;
+  margin-top: 10px;
+`;
 const SubmitBtn = styled.div`
   height: 30px;
   width: 100%;

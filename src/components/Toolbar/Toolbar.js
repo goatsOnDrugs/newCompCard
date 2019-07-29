@@ -1,14 +1,14 @@
-import React from 'react';
-import { Link } from '@reach/router';
-import '../SideDrawer/DrawerToggleButton';
-import './Toolbar.css';
-import DrawerToggleButton from '../SideDrawer/DrawerToggleButton';
+import React from "react";
+import { Link } from "@reach/router";
+import "../SideDrawer/DrawerToggleButton";
+import "./Toolbar.css";
+import DrawerToggleButton from "../SideDrawer/DrawerToggleButton";
 
 const Toolbar = props => {
   return (
     <header className='toolbar'>
       <nav className='toolbar_navigation'>
-        <div>
+        <div className='toolbar_toggle-button'>
           <DrawerToggleButton click={props.drawerClickHandler} />
         </div>
         <div className='toolbar_logo'>

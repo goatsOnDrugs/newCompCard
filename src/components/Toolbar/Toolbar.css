@@ -1,5 +1,5 @@
 .toolbar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -40,8 +40,13 @@
   color: #fff;
   text-decoration: none;
 }
-.toolbar_navigation-items a:hover {
-}
+.toolbar_navigation-items a:hover,
 .toolbar_navigation-items a:active {
   color: red;
+}
+
+@media (min-width: 769px) {
+  .toolbar_toggle-button {
+    display: none;
+  }
 }
