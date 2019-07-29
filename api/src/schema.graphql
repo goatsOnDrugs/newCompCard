@@ -4,13 +4,6 @@ type Query {
   route(id: ID!): Route!
   user(email: String!): User!
 }
-type Route {
-  id: ID!
-  title: String!
-  points: Int!
-  attempts: Int!
-  climbedBy: User
-}
 type Mutation {
   post(attempts: Int!, title: String!, points: Int!): Route
   signup(
@@ -21,6 +14,7 @@ type Mutation {
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
   updateRouteAttempts(id: ID!, attempts: Int!): Route
+  createSignature(route: Route!, author: User!, id: ID!): Signature
 }
 type AuthPayload {
   token: String
@@ -32,4 +26,18 @@ type User {
   lastName: String!
   email: String!
   routes: [Route!]!
+  signatures: [Signature]
+}
+type Route {
+  id: ID!
+  title: String!
+  points: Int!
+  attempts: Int!
+  climbedBy: User
+  signatures: [Signature]
+}
+type Signature {
+  id: ID!
+  author: User!
+  route: Route!
 }

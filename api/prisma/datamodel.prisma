@@ -15,3 +15,9 @@ type User {
   password: String!
   routes: [Route!]!
 }
+
+type Signature {
+  id: ID! @id
+  author: User!
+  route: Route!
+}

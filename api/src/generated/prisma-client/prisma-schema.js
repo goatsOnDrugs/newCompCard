@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateSignature {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -26,6 +30,11 @@ type Mutation {
   upsertRoute(where: RouteWhereUniqueInput!, create: RouteCreateInput!, update: RouteUpdateInput!): Route!
   deleteRoute(where: RouteWhereUniqueInput!): Route
   deleteManyRoutes(where: RouteWhereInput): BatchPayload!
+  createSignature(data: SignatureCreateInput!): Signature!
+  updateSignature(data: SignatureUpdateInput!, where: SignatureWhereUniqueInput!): Signature
+  upsertSignature(where: SignatureWhereUniqueInput!, create: SignatureCreateInput!, update: SignatureUpdateInput!): Signature!
+  deleteSignature(where: SignatureWhereUniqueInput!): Signature
+  deleteManySignatures(where: SignatureWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -55,6 +64,9 @@ type Query {
   route(where: RouteWhereUniqueInput!): Route
   routes(where: RouteWhereInput, orderBy: RouteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Route]!
   routesConnection(where: RouteWhereInput, orderBy: RouteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RouteConnection!
+  signature(where: SignatureWhereUniqueInput!): Signature
+  signatures(where: SignatureWhereInput, orderBy: SignatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Signature]!
+  signaturesConnection(where: SignatureWhereInput, orderBy: SignatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SignatureConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -87,6 +99,11 @@ input RouteCreateInput {
 input RouteCreateManyWithoutClimbedByInput {
   create: [RouteCreateWithoutClimbedByInput!]
   connect: [RouteWhereUniqueInput!]
+}
+
+input RouteCreateOneInput {
+  create: RouteCreateInput
+  connect: RouteWhereUniqueInput
 }
 
 input RouteCreateWithoutClimbedByInput {
@@ -198,6 +215,13 @@ input RouteSubscriptionWhereInput {
   NOT: [RouteSubscriptionWhereInput!]
 }
 
+input RouteUpdateDataInput {
+  title: String
+  points: Int
+  attempts: Int
+  climbedBy: UserUpdateOneWithoutRoutesInput
+}
+
 input RouteUpdateInput {
   title: String
   points: Int
@@ -234,6 +258,13 @@ input RouteUpdateManyWithWhereNestedInput {
   data: RouteUpdateManyDataInput!
 }
 
+input RouteUpdateOneRequiredInput {
+  create: RouteCreateInput
+  update: RouteUpdateDataInput
+  upsert: RouteUpsertNestedInput
+  connect: RouteWhereUniqueInput
+}
+
 input RouteUpdateWithoutClimbedByDataInput {
   title: String
   points: Int
@@ -243,6 +274,11 @@ input RouteUpdateWithoutClimbedByDataInput {
 input RouteUpdateWithWhereUniqueWithoutClimbedByInput {
   where: RouteWhereUniqueInput!
   data: RouteUpdateWithoutClimbedByDataInput!
+}
+
+input RouteUpsertNestedInput {
+  update: RouteUpdateDataInput!
+  create: RouteCreateInput!
 }
 
 input RouteUpsertWithWhereUniqueWithoutClimbedByInput {
@@ -314,8 +350,90 @@ input RouteWhereUniqueInput {
   id: ID
 }
 
+type Signature {
+  id: ID!
+  author: User!
+  route: Route!
+}
+
+type SignatureConnection {
+  pageInfo: PageInfo!
+  edges: [SignatureEdge]!
+  aggregate: AggregateSignature!
+}
+
+input SignatureCreateInput {
+  id: ID
+  author: UserCreateOneInput!
+  route: RouteCreateOneInput!
+}
+
+type SignatureEdge {
+  node: Signature!
+  cursor: String!
+}
+
+enum SignatureOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type SignaturePreviousValues {
+  id: ID!
+}
+
+type SignatureSubscriptionPayload {
+  mutation: MutationType!
+  node: Signature
+  updatedFields: [String!]
+  previousValues: SignaturePreviousValues
+}
+
+input SignatureSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SignatureWhereInput
+  AND: [SignatureSubscriptionWhereInput!]
+  OR: [SignatureSubscriptionWhereInput!]
+  NOT: [SignatureSubscriptionWhereInput!]
+}
+
+input SignatureUpdateInput {
+  author: UserUpdateOneRequiredInput
+  route: RouteUpdateOneRequiredInput
+}
+
+input SignatureWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  author: UserWhereInput
+  route: RouteWhereInput
+  AND: [SignatureWhereInput!]
+  OR: [SignatureWhereInput!]
+  NOT: [SignatureWhereInput!]
+}
+
+input SignatureWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   route(where: RouteSubscriptionWhereInput): RouteSubscriptionPayload
+  signature(where: SignatureSubscriptionWhereInput): SignatureSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -341,6 +459,11 @@ input UserCreateInput {
   email: String!
   password: String!
   routes: RouteCreateManyWithoutClimbedByInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutRoutesInput {
@@ -400,6 +523,14 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  routes: RouteUpdateManyWithoutClimbedByInput
+}
+
 input UserUpdateInput {
   firstName: String
   lastName: String
@@ -413,6 +544,13 @@ input UserUpdateManyMutationInput {
   lastName: String
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneWithoutRoutesInput {
@@ -429,6 +567,11 @@ input UserUpdateWithoutRoutesDataInput {
   lastName: String
   email: String
   password: String
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutRoutesInput {
