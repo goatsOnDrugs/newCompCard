@@ -4,6 +4,8 @@ import gql from "graphql-tag";
 import { navigate } from "@reach/router";
 import styled from "styled-components";
 
+import Button from "../components/common/Button";
+import Input from "../components/common/Input";
 import { AUTH_TOKEN } from "../constants";
 
 const SIGNUP_MUTATION = gql`
@@ -44,53 +46,86 @@ export default class Login extends Component {
     const { login, email, password, firstName, lastName } = this.state;
     return (
       <Container>
-        <Title>{login ? "Login" : "Sign Up"}</Title>
-        <InputWrapper>
-          {!login && (
+        <Title>{login ? "Welcome!" : "Sign Up"}</Title>
+        {login ? (
+          <InputWrapper login>
+            {!login && (
+              <Input
+                value={firstName}
+                onChange={e => this.setState({ firstName: e.target.value })}
+                type='text'
+                placeholder='First Name'
+              />
+            )}
+            {!login && (
+              <Input
+                value={lastName}
+                onChange={e => this.setState({ lastName: e.target.value })}
+                type='text'
+                placeholder='Last Name'
+              />
+            )}
             <Input
-              value={firstName}
-              onChange={e => this.setState({ firstName: e.target.value })}
+              value={email}
+              onChange={e => this.setState({ email: e.target.value })}
               type='text'
-              placeholder='First Name'
+              placeholder='example@email.com'
             />
-          )}
-          {!login && (
             <Input
-              value={lastName}
-              onChange={e => this.setState({ lastName: e.target.value })}
+              value={password}
+              onChange={e => this.setState({ password: e.target.value })}
               type='text'
-              placeholder='Last Name'
+              placeholder={"Password"}
             />
-          )}
-          <Input
-            value={email}
-            onChange={e => this.setState({ email: e.target.value })}
-            type='text'
-            placeholder='example@email.com'
-          />
-          <Input
-            value={password}
-            onChange={e => this.setState({ password: e.target.value })}
-            type='text'
-            placeholder='Password'
-          />
-        </InputWrapper>
-        <div>
+          </InputWrapper>
+        ) : (
+          <InputWrapper signup>
+            {!login && (
+              <Input
+                value={firstName}
+                onChange={e => this.setState({ firstName: e.target.value })}
+                type='text'
+                placeholder='First Name'
+              />
+            )}
+            {!login && (
+              <Input
+                value={lastName}
+                onChange={e => this.setState({ lastName: e.target.value })}
+                type='text'
+                placeholder='Last Name'
+              />
+            )}
+            <Input
+              value={email}
+              onChange={e => this.setState({ email: e.target.value })}
+              type='text'
+              placeholder='example@email.com'
+            />
+            <Input
+              value={password}
+              onChange={e => this.setState({ password: e.target.value })}
+              type='text'
+              placeholder={"Password"}
+            />
+          </InputWrapper>
+        )}
+        <ButtonWrapper>
           <Mutation
             mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
             variables={{ email, password, firstName, lastName }}
             onCompleted={data => this._confirm(data)}
           >
             {mutation => (
-              <SubmitBtn onClick={mutation}>
+              <Button onClick={mutation}>
                 {login ? "login" : "create account"}
-              </SubmitBtn>
+              </Button>
             )}
           </Mutation>
           <ToggleButton onClick={() => this.setState({ login: !login })}>
             {login ? "Need to create an account?" : "already have an account?"}
           </ToggleButton>
-        </div>
+        </ButtonWrapper>
       </Container>
     );
   }
@@ -111,40 +146,40 @@ export default class Login extends Component {
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  padding-top: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #000;
+  border: 1px solid green;
 `;
-const Title = styled.h2``;
+const Title = styled.h2`
+  color: #fff;
+`;
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: ${props => (props.login ? "space-evenly" : "space-around")};
   align-items: center;
-  height: 150px;
+  height: 40%;
   width: 100%;
-  border: 1px dotted #000;
-  padding: 20px;
 `;
-const Input = styled.input`
-  width: 75%;
-  height: 30px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  padding-left: 5px;
+
+const ButtonWrapper = styled.div`
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  height: 20%;
+  justify-content: space-around;
 `;
+
 const ToggleButton = styled.div`
-  border: 1px solid #000;
-  margin-top: 10px;
-`;
-const SubmitBtn = styled.div`
   height: 30px;
   width: 100%;
   border: 1px solid #000;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 5px;
+  background: #000;
+  color: #fff;
 `;

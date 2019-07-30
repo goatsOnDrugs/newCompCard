@@ -1,3 +1,19 @@
+# Welcome to CompCard!
+
+## Description of Product
+
+## Tech Stack
+
+## Getting Started
+
+## Color Scheme
+
+- background color #3f444d
+- input color #dfe2e8
+- button color negative #e33b24
+- button color positive #2ac924
+- maybe this one too #2842eb
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

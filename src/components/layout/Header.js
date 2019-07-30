@@ -35,5 +35,4 @@ export default class Header extends Component {
 
 const Container = styled.div`
   display: flex;
-  height: 28px;
 `;

@@ -19,8 +19,12 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   width: 100%;
+  padding: 0;
+  margin: 0;
   border: 1px dotted red;
+  background-color: #3f444d;
 `;
 const Main = styled.main`
   width: 100%;
+  height: 100%;
 `;
