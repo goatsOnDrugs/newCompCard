@@ -40,31 +40,16 @@ export default class Login extends Component {
     email: "",
     password: "",
     firstName: "",
-    lastName: ""
+    lastName: "",
+    errors: []
   };
   render() {
-    const { login, email, password, firstName, lastName } = this.state;
+    const { login, email, password, firstName, lastName, errors } = this.state;
     return (
       <Container>
         <Title>{login ? "Welcome!" : "Sign Up"}</Title>
         {login ? (
           <InputWrapper login>
-            {!login && (
-              <Input
-                value={firstName}
-                onChange={e => this.setState({ firstName: e.target.value })}
-                type='text'
-                placeholder='First Name'
-              />
-            )}
-            {!login && (
-              <Input
-                value={lastName}
-                onChange={e => this.setState({ lastName: e.target.value })}
-                type='text'
-                placeholder='Last Name'
-              />
-            )}
             <Input
               value={email}
               onChange={e => this.setState({ email: e.target.value })}
@@ -77,25 +62,23 @@ export default class Login extends Component {
               type='text'
               placeholder={"Password"}
             />
+            {errors.length > 0 ? <Errors>something</Errors> : null}
           </InputWrapper>
         ) : (
           <InputWrapper signup>
-            {!login && (
-              <Input
-                value={firstName}
-                onChange={e => this.setState({ firstName: e.target.value })}
-                type='text'
-                placeholder='First Name'
-              />
-            )}
-            {!login && (
-              <Input
-                value={lastName}
-                onChange={e => this.setState({ lastName: e.target.value })}
-                type='text'
-                placeholder='Last Name'
-              />
-            )}
+            <Input
+              value={firstName}
+              onChange={e => this.setState({ firstName: e.target.value })}
+              type='text'
+              placeholder='First Name'
+            />
+
+            <Input
+              value={lastName}
+              onChange={e => this.setState({ lastName: e.target.value })}
+              type='text'
+              placeholder='Last Name'
+            />
             <Input
               value={email}
               onChange={e => this.setState({ email: e.target.value })}
@@ -108,6 +91,7 @@ export default class Login extends Component {
               type='text'
               placeholder={"Password"}
             />
+            {errors.length > 0 ? <Errors>something</Errors> : null}
           </InputWrapper>
         )}
         <ButtonWrapper>
@@ -117,7 +101,7 @@ export default class Login extends Component {
             onCompleted={data => this._confirm(data)}
           >
             {mutation => (
-              <Button onClick={mutation}>
+              <Button onClick={mutation} primary>
                 {login ? "login" : "create account"}
               </Button>
             )}
@@ -152,7 +136,7 @@ const Container = styled.div`
   justify-content: center;
   border: 1px solid green;
 `;
-const Title = styled.h2`
+const Title = styled.h1`
   color: #fff;
 `;
 const InputWrapper = styled.div`
@@ -173,7 +157,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const ToggleButton = styled.div`
-  height: 30px;
+  height: 35px;
   width: 100%;
   border: 1px solid #000;
   display: flex;
@@ -183,3 +167,4 @@ const ToggleButton = styled.div`
   background: #000;
   color: #fff;
 `;
+const Errors = styled.p``;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ children }) => {
+const Button = ({ children }, props) => {
   return <Container>{children}</Container>;
 };
 
@@ -16,5 +16,6 @@ const Container = styled.div`
   align-items: center;
   border-radius: 5px;
   background: #2ac924;
+  /* background: ${props => (props.primary ? "#2ac924" : "#000")}; */
   color: #fff;
 `;

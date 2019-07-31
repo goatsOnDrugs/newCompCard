@@ -20,4 +20,6 @@ body {
 #root {
   height: 100%;
   padding: 0px;
+  font-family: "Roboto";
 }
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
