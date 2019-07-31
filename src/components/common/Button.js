@@ -7,7 +7,7 @@ const Button = ({ children }, props) => {
 
 export default Button;
 
-const Container = styled.div`
+const Container = styled.button`
   height: 35px;
   width: 100%;
   border: 1px solid #999;

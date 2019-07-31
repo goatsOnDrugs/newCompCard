@@ -138,38 +138,42 @@ const Container = styled.div`
   justify-content: center;
   border: 1px solid green;
 `;
-// const Title = styled.h1`
-//   color: #fff;
-// `;
-// const InputWrapper = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: ${props => (props.login ? "space-evenly" : "space-around")};
-//   align-items: center;
-//   height: 40%;
-//   width: 100%;
-// `;
+const Title = styled.h1`
+  color: #fff;
+`;
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: ${props => (props.login ? "space-evenly" : "space-around")};
+  align-items: center;
+  height: 40%;
+  width: 100%;
+`;
 
-// const ButtonWrapper = styled.div`
-//   width: 65%;
-//   display: flex;
-//   flex-direction: column;
-//   height: 20%;
-//   justify-content: space-around;
-// `;
+const ButtonWrapper = styled.div`
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  height: 20%;
+  justify-content: space-around;
+`;
 
-// const ToggleButton = styled.div`
-//   height: 35px;
-//   width: 100%;
-//   border: 1px solid #000;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   border-radius: 5px;
-//   background: #000;
-//   color: #fff;
-// `;
-// const Errors = styled.p``;
+const ToggleButton = styled.div`
+  height: 35px;
+  width: 100%;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #000;
+  color: #fff;
+`;
+const FormWrapper = styled.form`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -178,6 +182,13 @@ const LOGIN_MUTATION = gql`
     }
   }
 `;
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("invalid email dingus")
+    .required("gotta have it dingus"),
+  password: Yup.string().required("need it for sure")
+});
 
 const Login = () => {
   return (
@@ -188,7 +199,7 @@ const Login = () => {
             validateOnBlur={false}
             validateOnChange={false}
             onSubmit={async (data, { setErrors }) => {
-              console.log(data);
+              console.log();
               try {
                 const response = await login({
                   variables: {
@@ -196,6 +207,7 @@ const Login = () => {
                     password: `${data.password}`
                   }
                 });
+
                 console.log(response);
               } catch (err) {
                 console.log(err);
@@ -206,13 +218,35 @@ const Login = () => {
               email: "",
               password: ""
             }}
+            validationSchema={LoginSchema}
           >
-            {({ handleSubmit }) => (
-              <form onSubmit={handleSubmit}>
-                <Field name='email' placeholder='email' />
-                <Field name='password' placeholder='password' type='password' />
-                <button type='submit'>submit</button>
-              </form>
+            {({ handleSubmit, errors, touched }) => (
+              <FormWrapper onSubmit={handleSubmit}>
+                <Container>
+                  <Title>Welcome</Title>
+                  <InputWrapper>
+                    <Field
+                      name='email'
+                      placeholder='email'
+                      type='email'
+                      component={Input}
+                    />
+                    {errors.email && touched.email ? (
+                      <div>{errors.email}</div>
+                    ) : null}
+                    <Field
+                      name='password'
+                      placeholder='password'
+                      type='password'
+                      component={Input}
+                    />
+                    {errors.password && touched.password ? (
+                      <div>{errors.password}</div>
+                    ) : null}
+                  </InputWrapper>
+                  <Button type='submit'>submit</Button>
+                </Container>
+              </FormWrapper>
             )}
           </Formik>
         )}
