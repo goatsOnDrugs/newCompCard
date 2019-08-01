@@ -2,7 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 const Button = ({ children }, props) => {
-  return <Container>{children}</Container>;
+  return (
+    <Container type={props.type} disabled={props.disabled}>
+      {children}
+    </Container>
+  );
 };
 
 export default Button;

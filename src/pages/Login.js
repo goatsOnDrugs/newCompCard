@@ -4,10 +4,9 @@ import gql from "graphql-tag";
 import { navigate } from "@reach/router";
 import styled from "styled-components";
 import { Formik, Field } from "formik";
-import * as EmailValidator from "email-validator";
 import * as Yup from "yup";
+
 import Button from "../components/common/Button";
-import Input from "../components/common/Input";
 import { AUTH_TOKEN } from "../constants";
 
 // const SIGNUP_MUTATION = gql`
@@ -129,6 +128,114 @@ import { AUTH_TOKEN } from "../constants";
 //   };
 // }
 
+const LOGIN_MUTATION = gql`
+  mutation LoginMutation($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+    }
+  }
+`;
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("invalid email dingus")
+    .required("gotta have it dingus"),
+  password: Yup.string().required("need it for sure")
+});
+
+const Login = () => {
+  const _confirm = async data => {
+    const { token } = data.data.login;
+    _saveUserData(token);
+    localStorage.setItem("email", data.email);
+    navigate("/routes");
+  };
+
+  // local storage is not as secure as cookie. change to another method?
+  const _saveUserData = token => {
+    localStorage.setItem(AUTH_TOKEN, token);
+  };
+  return (
+    <Container>
+      <Mutation mutation={LOGIN_MUTATION}>
+        {(login, data, loading, error) => (
+          <Formik
+            initialValues={{
+              email: "",
+              password: ""
+            }}
+            validationSchema={LoginSchema}
+            onSubmit={async data => {
+              console.log(data);
+              try {
+                const response = await login({
+                  variables: {
+                    email: `${data.email}`,
+                    password: `${data.password}`
+                  }
+                });
+                _confirm(response);
+                console.log(response);
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            {({ handleSubmit, errors, touched }) => (
+              <FormWrapper onSubmit={handleSubmit}>
+                <Container>
+                  <Title>Welcome</Title>
+                  <InputContainer>
+                    <InputWrapper>
+                      <Input name='email' placeholder='email' type='email' />
+                      <ErrorMsg>
+                        {errors.email && touched.email ? (
+                          <div>{errors.email.toUpperCase()}</div>
+                        ) : null}
+                      </ErrorMsg>
+                    </InputWrapper>
+                    <InputWrapper>
+                      <Input
+                        name='password'
+                        placeholder='password'
+                        type='password'
+                      />
+                      <ErrorMsg>
+                        {errors.password && touched.password ? (
+                          <div>{errors.password.toUpperCase()}</div>
+                        ) : null}
+                      </ErrorMsg>
+                    </InputWrapper>
+                    {/* {mutationError ? (
+                      <ErrorMsg>{mutationError}</ErrorMsg>
+                    ) : null} */}
+                  </InputContainer>
+                  <ButtonWrapper>
+                    <Button type='submit' disabled={loading}>
+                      submit
+                    </Button>
+                  </ButtonWrapper>
+                </Container>
+              </FormWrapper>
+            )}
+          </Formik>
+        )}
+      </Mutation>
+    </Container>
+  );
+};
+
+export default Login;
+
+const Input = styled(Field)`
+  width: 75%;
+  height: 30px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  padding-left: 5px;
+  background-color: #dfe2e8;
+`;
+
 const Container = styled.div`
   height: 100%;
   width: 100%;
@@ -138,16 +245,30 @@ const Container = styled.div`
   justify-content: center;
   border: 1px solid green;
 `;
+
 const Title = styled.h1`
   color: #fff;
 `;
-const InputWrapper = styled.div`
+
+const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: ${props => (props.login ? "space-evenly" : "space-around")};
+  justify-content: center;
   align-items: center;
   height: 40%;
   width: 100%;
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+const ErrorMsg = styled.p`
+  color: #e33b24;
 `;
 
 const ButtonWrapper = styled.div`
@@ -174,85 +295,3 @@ const FormWrapper = styled.form`
   height: 100%;
   display: flex;
 `;
-
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-    }
-  }
-`;
-
-const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("invalid email dingus")
-    .required("gotta have it dingus"),
-  password: Yup.string().required("need it for sure")
-});
-
-const Login = () => {
-  return (
-    <Container>
-      <Mutation mutation={LOGIN_MUTATION}>
-        {login => (
-          <Formik
-            validateOnBlur={false}
-            validateOnChange={false}
-            onSubmit={async (data, { setErrors }) => {
-              console.log();
-              try {
-                const response = await login({
-                  variables: {
-                    email: `${data.email}`,
-                    password: `${data.password}`
-                  }
-                });
-
-                console.log(response);
-              } catch (err) {
-                console.log(err);
-                console.log(data);
-              }
-            }}
-            initialValues={{
-              email: "",
-              password: ""
-            }}
-            validationSchema={LoginSchema}
-          >
-            {({ handleSubmit, errors, touched }) => (
-              <FormWrapper onSubmit={handleSubmit}>
-                <Container>
-                  <Title>Welcome</Title>
-                  <InputWrapper>
-                    <Field
-                      name='email'
-                      placeholder='email'
-                      type='email'
-                      component={Input}
-                    />
-                    {errors.email && touched.email ? (
-                      <div>{errors.email}</div>
-                    ) : null}
-                    <Field
-                      name='password'
-                      placeholder='password'
-                      type='password'
-                      component={Input}
-                    />
-                    {errors.password && touched.password ? (
-                      <div>{errors.password}</div>
-                    ) : null}
-                  </InputWrapper>
-                  <Button type='submit'>submit</Button>
-                </Container>
-              </FormWrapper>
-            )}
-          </Formik>
-        )}
-      </Mutation>
-    </Container>
-  );
-};
-
-export default Login;
