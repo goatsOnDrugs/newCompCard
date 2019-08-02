@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import { navigate } from "@reach/router";
@@ -149,7 +149,6 @@ const Login = () => {
   const _confirm = async data => {
     const { token } = data.data.login;
     _saveUserData(token);
-    console.log(data);
     localStorage.setItem("email", email);
     navigate("/routes");
   };
@@ -200,7 +199,6 @@ const Login = () => {
                         type='email'
                         onKeyUp={onChangeHandler}
                       />
-                      {console.log(email)}
                       <ErrorMsg>
                         {errors.email && touched.email ? (
                           <div>{errors.email.toUpperCase()}</div>
@@ -221,12 +219,12 @@ const Login = () => {
                     </InputWrapper>
                   </InputContainer>
                   {serverError.error &&
-                  serverError.error.toString() ==
+                  serverError.error.toString() ===
                     "Error: GraphQL error: No such user found" ? (
                     <ErrorMsg>User Not Found</ErrorMsg>
                   ) : null}
                   {serverError.error &&
-                  serverError.error.toString() ==
+                  serverError.error.toString() ===
                     "Error: GraphQL error: Invalid password" ? (
                     <ErrorMsg>Invalid Password</ErrorMsg>
                   ) : null}
@@ -299,17 +297,18 @@ const ButtonWrapper = styled.div`
   justify-content: space-around;
 `;
 
-const ToggleButton = styled.div`
-  height: 35px;
-  width: 100%;
-  border: 1px solid #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  background: #000;
-  color: #fff;
-`;
+// const ToggleButton = styled.div`
+//   height: 35px;
+//   width: 100%;
+//   border: 1px solid #000;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   border-radius: 5px;
+//   background: #000;
+//   color: #fff;
+// `;
+
 const FormWrapper = styled.form`
   width: 100%;
   height: 100%;
