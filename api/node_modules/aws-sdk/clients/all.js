@@ -173,5 +173,17 @@ module.exports = {
   Backup: require('./backup'),
   WorkLink: require('./worklink'),
   Textract: require('./textract'),
-  ManagedBlockchain: require('./managedblockchain')
+  ManagedBlockchain: require('./managedblockchain'),
+  MediaPackageVod: require('./mediapackagevod'),
+  GroundStation: require('./groundstation'),
+  IoTThingsGraph: require('./iotthingsgraph'),
+  IoTEvents: require('./iotevents'),
+  IoTEventsData: require('./ioteventsdata'),
+  Personalize: require('./personalize'),
+  PersonalizeEvents: require('./personalizeevents'),
+  PersonalizeRuntime: require('./personalizeruntime'),
+  ApplicationInsights: require('./applicationinsights'),
+  ServiceQuotas: require('./servicequotas'),
+  EC2InstanceConnect: require('./ec2instanceconnect'),
+  EventBridge: require('./eventbridge')
 };

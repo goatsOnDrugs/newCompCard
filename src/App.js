@@ -8,7 +8,7 @@ import RouteList from "./pages/RouteList";
 import Route from "./pages/Route";
 import Home from "./pages/Home";
 import Signature from "./pages/Signature";
-
+import Signup from './pages/Signature';
 function App() {
   return (
     <Layout>
@@ -18,6 +18,7 @@ function App() {
         <RouteList path='routes' />
         <Route path='route' />
         <Signature path='signature' />
+        <Signup path='signup' />
       </StyledRouter>
     </Layout>
   );

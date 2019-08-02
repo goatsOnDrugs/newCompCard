@@ -1,6 +1,6 @@
 # http endpoint for Prisma API
 #endpoint: ""
-endpoint: http://localhost:4466
+endpoint: https://compcard-3fbed8df85.herokuapp.com
 
 # Points to the file that contains your datamodel
 datamodel: datamodel.prisma
