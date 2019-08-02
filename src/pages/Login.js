@@ -145,11 +145,12 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const [serverError, setServerError] = useState({ error: null });
+  const [email, setEmail] = useState("");
   const _confirm = async data => {
     const { token } = data.data.login;
     _saveUserData(token);
     console.log(data);
-    localStorage.setItem("email", data.email);
+    localStorage.setItem("email", email);
     navigate("/routes");
   };
 
@@ -159,6 +160,9 @@ const Login = () => {
   };
   const addError = newError => {
     setServerError({ error: newError });
+  };
+  const onChangeHandler = e => {
+    setEmail(e.target.value);
   };
   return (
     <Container>
@@ -190,7 +194,13 @@ const Login = () => {
                   <Title>Welcome</Title>
                   <InputContainer>
                     <InputWrapper>
-                      <Input name='email' placeholder='email' type='email' />
+                      <Input
+                        name='email'
+                        placeholder='email'
+                        type='email'
+                        onKeyUp={onChangeHandler}
+                      />
+                      {console.log(email)}
                       <ErrorMsg>
                         {errors.email && touched.email ? (
                           <div>{errors.email.toUpperCase()}</div>
