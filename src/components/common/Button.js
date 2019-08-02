@@ -22,4 +22,5 @@ const Container = styled.button`
   background: #2ac924;
   /* background: ${props => (props.primary ? "#2ac924" : "#000")}; */
   color: #fff;
+  font-size: 18px;
 `;
