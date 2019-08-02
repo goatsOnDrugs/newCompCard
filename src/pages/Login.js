@@ -5,6 +5,7 @@ import { navigate } from "@reach/router";
 import styled from "styled-components";
 import { Formik, Field } from "formik";
 import * as Yup from "yup";
+import { Link } from "@reach/router";
 
 import Button from "../components/common/Button";
 import { AUTH_TOKEN } from "../constants";
@@ -146,6 +147,7 @@ const LoginSchema = Yup.object().shape({
 const Login = () => {
   const [serverError, setServerError] = useState({ error: null });
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const _confirm = async data => {
     const { token } = data.data.login;
     _saveUserData(token);
@@ -166,7 +168,7 @@ const Login = () => {
   return (
     <Container>
       <Mutation mutation={LOGIN_MUTATION}>
-        {(login, loading, error, data) => (
+        {login => (
           <Formik
             initialValues={{
               email: "",
@@ -175,6 +177,7 @@ const Login = () => {
             validationSchema={LoginSchema}
             onSubmit={async data => {
               try {
+                setLoading(true);
                 const response = await login({
                   variables: {
                     email: `${data.email}`,
@@ -184,6 +187,7 @@ const Login = () => {
                 _confirm(response);
               } catch (err) {
                 addError(err);
+                setLoading(false);
               }
             }}
           >
@@ -194,9 +198,9 @@ const Login = () => {
                   <InputContainer>
                     <InputWrapper>
                       <Input
-                        name='email'
-                        placeholder='email'
-                        type='email'
+                        name="email"
+                        placeholder="email"
+                        type="email"
                         onKeyUp={onChangeHandler}
                       />
                       <ErrorMsg>
@@ -207,9 +211,9 @@ const Login = () => {
                     </InputWrapper>
                     <InputWrapper>
                       <Input
-                        name='password'
-                        placeholder='password'
-                        type='password'
+                        name="password"
+                        placeholder="password"
+                        type="password"
                       />
                       <ErrorMsg>
                         {errors.password && touched.password ? (
@@ -229,10 +233,12 @@ const Login = () => {
                     <ErrorMsg>Invalid Password</ErrorMsg>
                   ) : null}
                   <ButtonWrapper>
-                    <Button type='submit' disabled={loading}>
+                    <Button type="submit" disabled={loading}>
                       submit
                     </Button>
+                    <Link to="/signup">Create Account</Link>
                   </ButtonWrapper>
+                  {loading ? <div>loading...</div> : null}
                 </Container>
               </FormWrapper>
             )}
