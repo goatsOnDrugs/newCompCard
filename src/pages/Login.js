@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import { navigate } from "@reach/router";
@@ -144,9 +144,11 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = () => {
+  const [serverError, setServerError] = useState({ error: null });
   const _confirm = async data => {
     const { token } = data.data.login;
     _saveUserData(token);
+    console.log(data);
     localStorage.setItem("email", data.email);
     navigate("/routes");
   };
@@ -155,10 +157,13 @@ const Login = () => {
   const _saveUserData = token => {
     localStorage.setItem(AUTH_TOKEN, token);
   };
+  const addError = newError => {
+    setServerError({ error: newError });
+  };
   return (
     <Container>
       <Mutation mutation={LOGIN_MUTATION}>
-        {(login, data, loading, error) => (
+        {(login, loading, error, data) => (
           <Formik
             initialValues={{
               email: "",
@@ -166,7 +171,6 @@ const Login = () => {
             }}
             validationSchema={LoginSchema}
             onSubmit={async data => {
-              console.log(data);
               try {
                 const response = await login({
                   variables: {
@@ -175,9 +179,8 @@ const Login = () => {
                   }
                 });
                 _confirm(response);
-                console.log(response);
               } catch (err) {
-                console.log(err);
+                addError(err);
               }
             }}
           >
@@ -206,10 +209,17 @@ const Login = () => {
                         ) : null}
                       </ErrorMsg>
                     </InputWrapper>
-                    {/* {mutationError ? (
-                      <ErrorMsg>{mutationError}</ErrorMsg>
-                    ) : null} */}
                   </InputContainer>
+                  {serverError.error &&
+                  serverError.error.toString() ==
+                    "Error: GraphQL error: No such user found" ? (
+                    <ErrorMsg>User Not Found</ErrorMsg>
+                  ) : null}
+                  {serverError.error &&
+                  serverError.error.toString() ==
+                    "Error: GraphQL error: Invalid password" ? (
+                    <ErrorMsg>Invalid Password</ErrorMsg>
+                  ) : null}
                   <ButtonWrapper>
                     <Button type='submit' disabled={loading}>
                       submit
