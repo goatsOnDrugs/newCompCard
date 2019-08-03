@@ -13,12 +13,6 @@
   background-color: #000;
 }
 
-.attempts-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
 .submit-button {
   background-color: green;
   width: 100px;
