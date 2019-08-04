@@ -5,13 +5,13 @@ import { MdArrowForward } from "react-icons/md";
 
 const RouteListItem = props => {
   return (
-    <Container to='/route' state={{ id: props.id }}>
+    <Container to="/route" state={{ id: props.id }}>
       <Symbol>
         {props.title[0]}
         {props.title[props.title.length - 1]}
       </Symbol>
       <Points>POINTS: {props.points}</Points>
-      <MdArrowForward size='2em' color='#fff' />
+      <MdArrowForward size="2em" color="#fff" />
     </Container>
   );
 };
