@@ -9,7 +9,7 @@ import Route from "./pages/Route";
 import Home from "./pages/Home";
 import Signature from "./pages/Signature";
 import Signup from "./pages/Signup";
-import Profile from "./pages/Profile";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <Route path="route" />
         <Signature path="signature" />
         <Signup path="signup" />
-        <Profile path="profile" />
+        <ProfilePage path="profile" />
       </StyledRouter>
     </Layout>
   );
