@@ -1,19 +1,22 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Query } from "react-apollo";
-import gql from "graphql-tag";
 
 import Profile from "../components/Profile/Profile";
+import EditProfile from "../components/Profile/EditProfile";
 
 export default class ProfilePage extends Component {
+  state = {
+    isEditing: false
+  };
   render() {
     return (
       <Container>
         <Card>
-          <Profile />
           {/* // make a editing profile componenthere // make 3 buttons to
           conditionaly render that set state in this component to conditionaly
           render above componets: Edit, Save + Cancel */}
+          {/* {this.state.isEditing ? <EditProfile /> : <Profile />} */}
+          <EditProfile />
         </Card>
       </Container>
     );

@@ -10,6 +10,7 @@ const USER_QUERY = gql`
       firstName
       lastName
       id
+      email
     }
   }
 `;
@@ -24,14 +25,22 @@ const Profile = () => {
           if (loading) return "Loading...";
           if (error) return `Error! ${error.message}`;
           return (
-            <div>
+            <Container>
               {console.log(data)}
-              {data.user.firstName}
-            </div>
+              <Name>{`${data.user.firstName} ${data.user.lastName}`}</Name>
+              <Email>{data.user.email}</Email>
+            </Container>
           );
         }}
       </Query>
     </div>
   );
 };
+
 export default Profile;
+
+const Container = styled.div``;
+
+const Name = styled.h1``;
+
+const Email = styled.h2``;
