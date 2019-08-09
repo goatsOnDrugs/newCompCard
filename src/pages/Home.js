@@ -2,20 +2,29 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "@reach/router";
 import Cleave from "cleave.js/react";
+import { navigate } from "@reach/router";
 
+import { AUTH_TOKEN } from "../constants";
 import Button from "../components/common/Button";
 
 const Home = () => {
+  const auth = localStorage.getItem(AUTH_TOKEN);
   return (
     <Container>
-      <H2>ENTER YOUR COMPETITION ID</H2>
-      <Input
-        placeholder="###-###"
-        options={{ blocks: [3, 3], delimiter: "-" }}
-      />
-      <Link to="routes" style={{ textDecoration: "none", marginTop: 20 }}>
-        <Button title="START CLIMBING" />
-      </Link>
+      {auth ? (
+        <Container>
+          <H2>ENTER YOUR COMPETITION ID</H2>
+          <Input
+            placeholder="###-###"
+            options={{ blocks: [3, 3], delimiter: "-" }}
+          />
+          <Link to="routes" style={{ textDecoration: "none", marginTop: 20 }}>
+            <Button title="START CLIMBING" />
+          </Link>
+        </Container>
+      ) : (
+        <div>{() => navigate("/login")}</div>
+      )}
     </Container>
   );
 };
