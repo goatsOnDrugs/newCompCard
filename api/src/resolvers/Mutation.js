@@ -107,11 +107,22 @@ function updateRouteAttempts(parent, args, context, info) {
   });
 }
 
+function updateUser(parent, args, context, info) {
+  return context.prisma.updateUser({
+    data: {
+      firstName: args.firstName,
+      lastName: args.lastName,
+      email: args.email
+    },
+    where: { id: args.id }
+  });
+}
 // route: { connect: { id: args.routeId } }
 
 module.exports = {
   signup,
   login,
   post,
-  updateRouteAttempts
+  updateRouteAttempts,
+  updateUser
 };

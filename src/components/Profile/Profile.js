@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
@@ -26,7 +25,6 @@ const Profile = () => {
           if (error) return `Error! ${error.message}`;
           return (
             <Container>
-              {console.log(data)}
               <Name>{`${data.user.firstName} ${data.user.lastName}`}</Name>
               <Email>{data.user.email}</Email>
             </Container>

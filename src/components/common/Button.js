@@ -1,10 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ children }, props) => {
+const Button = props => {
   return (
-    <Container type={props.type} disabled={props.disabled}>
-      {children}
+    <Container
+      type={props.type}
+      disabled={props.disabled}
+      onClick={props.click}
+    >
+      {props.title}
     </Container>
   );
 };

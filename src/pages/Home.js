@@ -14,7 +14,7 @@ const Home = () => {
         options={{ blocks: [3, 3], delimiter: "-" }}
       />
       <Link to="routes" style={{ textDecoration: "none", marginTop: 20 }}>
-        <Button>Start Climbing</Button>
+        <Button title="START CLIMBING" />
       </Link>
     </Container>
   );

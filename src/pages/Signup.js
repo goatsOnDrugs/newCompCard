@@ -266,9 +266,7 @@ const Login = () => {
                     <ErrorMsg>Invalid Password</ErrorMsg>
                   ) : null}
                   <ButtonWrapper>
-                    <Button type="submit" disabled={loading}>
-                      submit
-                    </Button>
+                    <Button type="submit" disabled={loading} title="SUBMIT" />
                   </ButtonWrapper>
                   {loading ? <div>loading...</div> : null}
                 </Container>

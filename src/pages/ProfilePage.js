@@ -3,20 +3,27 @@ import styled from "styled-components";
 
 import Profile from "../components/Profile/Profile";
 import EditProfile from "../components/Profile/EditProfile";
+import Button from "../components/common/Button";
 
 export default class ProfilePage extends Component {
   state = {
     isEditing: false
   };
   render() {
+    const onClickHandler = () => {
+      this.setState({ isEditing: !this.state.isEditing });
+    };
     return (
       <Container>
         <Card>
-          {/* // make a editing profile componenthere // make 3 buttons to
-          conditionaly render that set state in this component to conditionaly
-          render above componets: Edit, Save + Cancel */}
-          {/* {this.state.isEditing ? <EditProfile /> : <Profile />} */}
-          <EditProfile />
+          {this.state.isEditing ? <EditProfile /> : <Profile />}
+          {this.state.isEditing ? (
+            <div>
+              <Button click={onClickHandler} title="CANCEL" />
+            </div>
+          ) : (
+            <Button click={onClickHandler} title="EDIT" />
+          )}
         </Card>
       </Container>
     );

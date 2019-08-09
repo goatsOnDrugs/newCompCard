@@ -21,6 +21,7 @@ type Mutation {
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
   updateRouteAttempts(id: ID!, attempts: Int!): Route
+  updateUser(email: String, firstName: String, lastName: String, id: ID): User!
 }
 type AuthPayload {
   token: String
