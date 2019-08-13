@@ -9,8 +9,9 @@ import {
   IoMdRadioButtonOff,
   IoMdCheckmarkCircle
 } from "react-icons/io";
-
 import Button from "../components/common/Button";
+import { AUTH_TOKEN } from "../constants";
+import { navigate } from "@reach/router";
 import "./Route.css";
 
 const ROUTE_QUERY = gql`
@@ -40,85 +41,97 @@ const UPDATE_ATTEMPT_MUTATION = gql`
 `;
 
 const Route = props => {
+  const auth = localStorage.getItem(AUTH_TOKEN);
+
   return (
     <Container>
-      <Card>
-        <Query query={ROUTE_QUERY} variables={{ id: props.location.state.id }}>
-          {({ loading, error, data }) => {
-            if (loading) return "Loading...";
-            if (error) return `Error! ${error.message}`;
-            return (
-              <InnerCardWrapper>
-                <Back onClick={() => window.history.back()}>back</Back>
-                <h2>{data.route.title}</h2>
-                <h3>POINTS: {data.route.points}</h3>
-                <QRCode value={data.route.id} />
-                <AttemptsContainer className="attempts-container">
-                  <h3>ATTEMPTS:</h3>
-                  <CounterContainer>
-                    {data.route.attempts > 0 ? (
+      {auth ? (
+        <Card>
+          <Query
+            query={ROUTE_QUERY}
+            variables={{ id: props.location.state.id }}
+          >
+            {({ loading, error, data }) => {
+              if (loading) return "Loading...";
+              if (error) return `Error! ${error.message}`;
+              return (
+                <InnerCardWrapper>
+                  <Back onClick={() => window.history.back()}>back</Back>
+                  <h2>{data.route.title}</h2>
+                  <h3>POINTS: {data.route.points}</h3>
+                  <QRCode value={data.route.id} />
+                  <AttemptsContainer className="attempts-container">
+                    <h3>ATTEMPTS:</h3>
+                    <CounterContainer>
+                      {data.route.attempts > 0 ? (
+                        <Mutation
+                          mutation={UPDATE_ATTEMPT_MUTATION}
+                          variables={{
+                            id: data.route.id,
+                            attempts: data.route.attempts - 1
+                          }}
+                        >
+                          {mutation => (
+                            <IoIosRemoveCircleOutline
+                              onClick={mutation}
+                              size="65px"
+                            />
+                          )}
+                        </Mutation>
+                      ) : (
+                        <IoIosRemoveCircleOutline size="65px" />
+                      )}
+                      <Attempts>{data.route.attempts}</Attempts>
                       <Mutation
                         mutation={UPDATE_ATTEMPT_MUTATION}
                         variables={{
                           id: data.route.id,
-                          attempts: data.route.attempts - 1
+                          attempts: data.route.attempts + 1
                         }}
                       >
                         {mutation => (
-                          <IoIosRemoveCircleOutline
+                          <IoIosAddCircleOutline
                             onClick={mutation}
                             size="65px"
                           />
                         )}
                       </Mutation>
-                    ) : (
-                      <IoIosRemoveCircleOutline size="65px" />
-                    )}
-                    <Attempts>{data.route.attempts}</Attempts>
-                    <Mutation
-                      mutation={UPDATE_ATTEMPT_MUTATION}
-                      variables={{
-                        id: data.route.id,
-                        attempts: data.route.attempts + 1
-                      }}
-                    >
-                      {mutation => (
-                        <IoIosAddCircleOutline onClick={mutation} size="65px" />
-                      )}
-                    </Mutation>
-                  </CounterContainer>
-                </AttemptsContainer>
-                <Signatures>
-                  <H3>SIGNATURES: </H3>
-                  {!data.route.signatures ? (
-                    <CheckMarksContainer>
-                      <IoMdRadioButtonOff size={"50px"} />
-                      <IoMdRadioButtonOff size={"50px"} />
-                    </CheckMarksContainer>
-                  ) : null}
-                  {data.route.signatures &&
-                  data.route.signatures.length === 1 ? (
-                    <CheckMarksContainer>
-                      <IoMdCheckmarkCircle size={"50px"} />
-                      <IoMdRadioButtonOff size={"50px"} />
-                    </CheckMarksContainer>
-                  ) : null}
-                  {data.route.signatures &&
-                  data.route.signatures.length === 1 ? (
-                    <CheckMarksContainer>
-                      <IoMdCheckmarkCircle size={"50px"} />
-                      <IoMdCheckmarkCircle size={"50px"} />
-                    </CheckMarksContainer>
-                  ) : null}
-                </Signatures>
-                <ButtonContainer>
-                  <Button>SUBMIT</Button>
-                </ButtonContainer>
-              </InnerCardWrapper>
-            );
-          }}
-        </Query>
-      </Card>
+                    </CounterContainer>
+                  </AttemptsContainer>
+                  <Signatures>
+                    <H3>SIGNATURES: </H3>
+                    {!data.route.signatures ? (
+                      <CheckMarksContainer>
+                        <IoMdRadioButtonOff size={"50px"} />
+                        <IoMdRadioButtonOff size={"50px"} />
+                      </CheckMarksContainer>
+                    ) : null}
+                    {data.route.signatures &&
+                    data.route.signatures.length === 1 ? (
+                      <CheckMarksContainer>
+                        <IoMdCheckmarkCircle size={"50px"} />
+                        <IoMdRadioButtonOff size={"50px"} />
+                      </CheckMarksContainer>
+                    ) : null}
+                    {data.route.signatures &&
+                    data.route.signatures.length === 1 ? (
+                      <CheckMarksContainer>
+                        <IoMdCheckmarkCircle size={"50px"} />
+                        <IoMdCheckmarkCircle size={"50px"} />
+                      </CheckMarksContainer>
+                    ) : null}
+                  </Signatures>
+                  <ButtonContainer>
+                    <Button>SUBMIT</Button>
+                  </ButtonContainer>
+                </InnerCardWrapper>
+              );
+            }}
+          </Query>
+        </Card>
+      ) : (
+        <Button click={() => navigate("/login")} title="LOGIN" />
+      )}
     </Container>
   );
 };

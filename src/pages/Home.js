@@ -23,7 +23,7 @@ const Home = () => {
           </Link>
         </Container>
       ) : (
-        <div>{() => navigate("/login")}</div>
+        <Button click={() => navigate("/login")} title="LOGIN" />
       )}
     </Container>
   );
