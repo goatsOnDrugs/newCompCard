@@ -24,25 +24,6 @@ const server = new GraphQLServer({
     };
   }
 });
-
-const opts = {
-  cors: {
-    credentials: true,
-    origin: "http://localhost:3000"
-  }
-};
-
-server.start(
-  {
-    cors: {
-      credentials: true,
-      origin: "http://localhost:3000",
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      preflightContinue: false,
-      optionsSuccessStatus: 204
-    }
-  },
-  server => {
-    console.log(`Server is running on http://localhost/4000`);
-  }
+server.start(() =>
+  console.log("server is up and running on port 4000, woohoo!")
 );
