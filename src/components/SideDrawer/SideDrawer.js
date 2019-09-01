@@ -16,7 +16,6 @@ const SideDrawer = props => {
     <MenuConsumer>
       {context => (
         <nav className={drawerClasses.join(" ")}>
-          {console.log(context)}
           <ul>
             <li onClick={context.drawerToggle}>
               <Link to="/">Link</Link>
