@@ -1,16 +1,16 @@
-const { GraphQLServer } = require("graphql-yoga")
-const { prisma } = require("./generated/prisma-client")
-const Query = require("./resolvers/Query")
-const Mutation = require("./resolvers/Mutation")
-const User = require("./resolvers/User")
-const Route = require("./resolvers/Route")
+const { GraphQLServer } = require("graphql-yoga");
+const { prisma } = require("./generated/prisma-client");
+const Query = require("./resolvers/Query");
+const Mutation = require("./resolvers/Mutation");
+const User = require("./resolvers/User");
+const Route = require("./resolvers/Route");
 
 const resolvers = {
   Query,
   Mutation,
   User,
-  Route,
-}
+  Route
+};
 
 // 3
 const server = new GraphQLServer({
@@ -20,10 +20,29 @@ const server = new GraphQLServer({
   context: request => {
     return {
       ...request,
-      prisma,
+      prisma
+    };
+  }
+});
+
+const opts = {
+  cors: {
+    credentials: true,
+    origin: "http://localhost:3000"
+  }
+};
+
+server.start(
+  {
+    cors: {
+      credentials: true,
+      origin: "http://localhost:3000",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      preflightContinue: false,
+      optionsSuccessStatus: 204
     }
   },
-})
-server.start(() =>
-  console.log("server is up and running on port 4000, woohoo!")
-)
+  server => {
+    console.log(`Server is running on http://localhost/4000`);
+  }
+);
