@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "./Header";
-
 import styled from "styled-components";
 
 const Layout = ({ children }) => {
@@ -19,12 +18,11 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   width: 100%;
-  padding: 0;
-  margin: 0;
   border: 1px dotted red;
   background-color: #3f444d;
 `;
 const Main = styled.main`
+  padding-top: 56px;
   width: 100%;
   height: 100%;
 `;

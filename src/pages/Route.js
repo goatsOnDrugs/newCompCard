@@ -12,7 +12,7 @@ import {
 import Button from "../components/common/Button";
 import { AUTH_TOKEN } from "../constants";
 import { navigate } from "@reach/router";
-import "./Route.css";
+import { TiArrowBack } from "react-icons/ti";
 
 const ROUTE_QUERY = gql`
   query RouteQuery($id: ID!) {
@@ -56,9 +56,11 @@ const Route = props => {
               if (error) return `Error! ${error.message}`;
               return (
                 <InnerCardWrapper>
-                  <Back onClick={() => window.history.back()}>back</Back>
-                  <h2>{data.route.title}</h2>
-                  <h3>POINTS: {data.route.points}</h3>
+                  <Back onClick={() => window.history.back()}>
+                    <TiArrowBack size="50px" />
+                  </Back>
+                  <H2>{data.route.title}</H2>
+                  <H3>POINTS: {data.route.points}</H3>
                   <QRCode value={data.route.id} />
                   <AttemptsContainer className="attempts-container">
                     <h3>ATTEMPTS:</h3>
@@ -122,7 +124,7 @@ const Route = props => {
                     ) : null}
                   </Signatures>
                   <ButtonContainer>
-                    <Button>SUBMIT</Button>
+                    <Button title="SUBMIT" />
                   </ButtonContainer>
                 </InnerCardWrapper>
               );
@@ -148,7 +150,7 @@ const Container = styled.div`
 
 const Card = styled.div`
   width: 85%;
-  height: 80%;
+  height: 85%;
   background: #dfe2e8;
   display: flex;
   flex-direction: column;
@@ -156,7 +158,6 @@ const Card = styled.div`
   border-radius: 10px;
   justify-content: space-between;
   padding: 10px;
-  margin-top: 20px;
 `;
 
 const AttemptsContainer = styled.div`
@@ -197,6 +198,7 @@ const Signatures = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
 `;
 
 const CheckMarksContainer = styled.div`
@@ -207,13 +209,23 @@ const CheckMarksContainer = styled.div`
   margin: 0;
 `;
 
-const H3 = styled.h3`
-  height: 20px;
-  margin: 0;
-`;
-
 const ButtonContainer = styled.div`
   width: 75%;
 `;
 
-const Back = styled.div``;
+const Back = styled.div`
+  position: fixed;
+  top: 100px;
+  left: 35px;
+`;
+
+const H3 = styled.h3`
+  padding: 0;
+  height: 20px;
+  margin: 0;
+`;
+
+const H2 = styled.h2`
+  padding: 0;
+  height: 25px;
+`;

@@ -68,6 +68,7 @@ const Login = () => {
                 _confirm(response);
               } catch (err) {
                 addError(err);
+                console.log(err);
                 setLoading(false);
               }
             }}

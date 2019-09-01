@@ -2,7 +2,6 @@ import React from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import RouteListItem from "../components/Routes/RouteListItem";
-import "./RouteList.css";
 import Button from "../components/common/Button";
 import { AUTH_TOKEN } from "../constants";
 import { navigate } from "@reach/router";
@@ -33,7 +32,7 @@ const RouteList = props => {
             if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
             return (
-              <div className="list-container">
+              <ListWrapper>
                 {data.user.routes.map(route => (
                   <RouteListItem
                     key={route.id}
@@ -43,7 +42,7 @@ const RouteList = props => {
                     points={route.points}
                   />
                 ))}
-              </div>
+              </ListWrapper>
             );
           }}
         </Query>
@@ -68,4 +67,12 @@ const Container = styled.div`
 
 const ButtonContainer = styled.div`
   width: 80%;
+`;
+
+const ListWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
 `;

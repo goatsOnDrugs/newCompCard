@@ -3,7 +3,7 @@ import QrReader from "react-qr-reader";
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import styled from "styled-components";
-
+import { TiArrowBack } from "react-icons/ti";
 import Button from "../components/common/Button";
 
 const USER_QUERY = gql`
@@ -43,11 +43,14 @@ export default class Signature extends Component {
     const email = localStorage.getItem("email");
     return (
       <Container>
+        <Back onClick={() => window.history.back()}>
+          <TiArrowBack size="50px" />
+        </Back>
         <QrReader
           delay={300}
           onError={this.handleError}
           onScan={this.handleScan}
-          style={{ width: "100%" }}
+          style={{ width: "100%", paddingTop: 30 }}
         />
         <p>{this.state.routeId}</p>
         <Query query={USER_QUERY} variables={{ email: email }}>
@@ -62,7 +65,7 @@ export default class Signature extends Component {
                   author: `${data.user.firstName} ${data.user.lastName}`
                 }}
               >
-                {mutation => <Button onClick={mutation}>Sign</Button>}
+                {mutation => <Button click={mutation} title="SIGN" />}
               </Mutation>
             );
           }}
@@ -79,5 +82,10 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  padding-top: 20px;
+`;
+
+const Back = styled.div`
+  position: fixed;
+  top: 50px;
+  left: 35px;
 `;

@@ -9,125 +9,6 @@ import * as Yup from "yup";
 import Button from "../components/common/Button";
 import { AUTH_TOKEN } from "../constants";
 
-// const SIGNUP_MUTATION = gql`
-//   mutation SignupMutation(
-//     $email: String!
-//     $password: String!
-//     $firstName: String!
-//     $lastName: String!
-//   ) {
-//     signup(
-//       email: $email
-//       password: $password
-//       firstName: $firstName
-//       lastName: $lastName
-//     ) {
-//       token
-//     }
-//   }
-// `;
-
-// const LOGIN_MUTATION = gql`
-//   mutation LoginMutation($email: String!, $password: String!) {
-//     login(email: $email, password: $password) {
-//       token
-//     }
-//   }
-// `;
-
-// export default class Login extends Component {
-//   state = {
-//     login: true, // switches between login and signup
-//     email: "",
-//     password: "",
-//     firstName: "",
-//     lastName: "",
-//     errors: []
-//   };
-//   render() {
-//     const { login, email, password, firstName, lastName, errors } = this.state;
-//     return (
-//       <Container>
-//         <Title>{login ? "Welcome!" : "Sign Up"}</Title>
-//         {login ? (
-//           <InputWrapper login>
-//             <Input
-//               value={email}
-//               onChange={e => this.setState({ email: e.target.value })}
-//               type='text'
-//               placeholder='example@email.com'
-//             />
-//             <Input
-//               value={password}
-//               onChange={e => this.setState({ password: e.target.value })}
-//               type='text'
-//               placeholder={"Password"}
-//             />
-//             {errors.length > 0 ? <Errors>something</Errors> : null}
-//           </InputWrapper>
-//         ) : (
-//           <InputWrapper signup>
-//             <Input
-//               value={firstName}
-//               onChange={e => this.setState({ firstName: e.target.value })}
-//               type='text'
-//               placeholder='First Name'
-//             />
-
-//             <Input
-//               value={lastName}
-//               onChange={e => this.setState({ lastName: e.target.value })}
-//               type='text'
-//               placeholder='Last Name'
-//             />
-//             <Input
-//               value={email}
-//               onChange={e => this.setState({ email: e.target.value })}
-//               type='email'
-//               placeholder='example@email.com'
-//             />
-//             <Input
-//               value={password}
-//               onChange={e => this.setState({ password: e.target.value })}
-//               type='password'
-//               placeholder={"Password"}
-//             />
-//             {errors.length > 0 ? <Errors>something</Errors> : null}
-//           </InputWrapper>
-//         )}
-//         <ButtonWrapper>
-//           <Mutation
-//             mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
-//             variables={{ email, password, firstName, lastName }}
-//             onCompleted={data => this._confirm(data)}
-//           >
-//             {mutation => (
-//               <Button onClick={mutation} primary>
-//                 {login ? "login" : "create account"}
-//               </Button>
-//             )}
-//           </Mutation>
-//           <ToggleButton onClick={() => this.setState({ login: !login })}>
-//             {login ? "Need to create an account?" : "already have an account?"}
-//           </ToggleButton>
-//         </ButtonWrapper>
-//       </Container>
-//     );
-//   }
-
-//   _confirm = async data => {
-//     const { token } = this.state.login ? data.login : data.signup;
-//     this._saveUserData(token);
-//     localStorage.setItem("email", this.state.email);
-//     navigate("/routes");
-//   };
-
-//   // local storage is not ideal. change to another method.
-//   _saveUserData = token => {
-//     localStorage.setItem(AUTH_TOKEN, token);
-//   };
-// }
-
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation(
     $email: String!
@@ -160,7 +41,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const _confirm = async data => {
-    console.log(data);
     const { token } = data.data.signup;
     _saveUserData(token);
     localStorage.setItem("email", email);

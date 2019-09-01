@@ -12,7 +12,7 @@ import { AUTH_TOKEN } from "./constants";
 
 // connecting to the api
 const httpLink = createHttpLink({
-  uri: "https://compcard-3fbed8df85.herokuapp.com/default/default"
+  uri: "http://localhost:4000"
 });
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem(AUTH_TOKEN);
