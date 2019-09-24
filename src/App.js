@@ -20,23 +20,17 @@ function App() {
 
   return (
     <Layout>
-      {auth ? (
-        <StyledRouter>
-          <NotFound default />
-          <Home path="/" />
-          <RouteList path="routes" />
-          <Route path="route" />
-          <Signature path="signature" />
-          <ProfilePage path="profile" />
-          <AdminDashboard path="dashboard" />
-        </StyledRouter>
-      ) : (
-        <StyledRouter>
-          <NotFound default />
-          <Login path="/" />
-          <Signup path="signup" />
-        </StyledRouter>
-      )}
+      <StyledRouter>
+        <NotFound default />
+        <Login path="/" />
+        <Signup path="signup" />
+        <Home path="/" />
+        <RouteList path="routes" />
+        <Route path="route" />
+        <Signature path="signature" />
+        <ProfilePage path="profile" />
+        <AdminDashboard path="dashboard" />
+      </StyledRouter>
     </Layout>
   );
 }

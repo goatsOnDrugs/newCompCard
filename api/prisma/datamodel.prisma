@@ -14,4 +14,10 @@ type User {
   email: String! @unique
   password: String!
   routes: [Route!]!
+  role: Role! @default(value: CLIMBER)
+}
+
+enum Role {
+  ADMIN
+  CLIMBER
 }
